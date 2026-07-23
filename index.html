@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=1.0, touch-action=manipulation">
+    <title>AI Hub – Note Translator • Study AI • Sage Fellow 1.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ─── same polished dark theme as before ─── */
+        :root {
+            --bg: #0c0c11;
+            --surface: #18181f;
+            --surface2: #1f1f28;
+            --surface3: #262630;
+            --primary: #5b8def;
+            --primary-glow: rgba(91, 141, 239, 0.35);
+            --accent: #34c9a8;
+            --accent2: #e06c75;
+            --warning: #d4a373;
+            --danger: #e06c75;
+            --success: #56b6c2;
+            --text: #e1e1e6;
+            --text2: #a0a0b0;
+            --text3: #6b6b7a;
+            --border: #2a2a35;
+            --border2: #32323e;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-xs: 5px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
+            --transition: 0.2s ease;
+            --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+            background-image:
+                radial-gradient(ellipse at 30% 10%, rgba(91, 141, 239, 0.03) 0%, transparent 55%),
+                radial-gradient(ellipse at 70% 80%, rgba(52, 201, 168, 0.02) 0%, transparent 55%);
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-layout { display:flex; flex:1; min-height:100vh; position:relative; }
+        .sidebar {
+            width:220px; background:var(--surface); border-right:1px solid var(--border);
+            padding:20px 14px; display:flex; flex-direction:column; gap:16px; flex-shrink:0;
+            z-index:10; transition:transform var(--transition); box-shadow:2px 0 20px rgba(0,0,0,0.3);
+        }
+        .sidebar-logo { display:flex; align-items:center; gap:10px; font-weight:600; font-size:1.05rem; color:#fff; letter-spacing:-0.2px; padding:6px 8px; }
+        .sidebar-logo .logo-dot { width:28px; height:28px; border-radius:6px; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 4px 12px var(--primary-glow); }
+        .sidebar-nav { display:flex; flex-direction:column; gap:2px; }
+        .sidebar-nav button {
+            display:flex; align-items:center; gap:10px; padding:10px 12px; background:transparent;
+            border:none; border-radius:var(--radius-sm); color:var(--text2); font-weight:500;
+            font-size:0.88rem; cursor:pointer; transition:all var(--transition); font-family:var(--font);
+            width:100%; text-align:left;
+        }
+        .sidebar-nav button:hover { background:rgba(255,255,255,0.03); color:#fff; }
+        .sidebar-nav button.active { background:rgba(91, 141, 239, 0.1); color:#fff; font-weight:600; box-shadow:inset 3px 0 0 var(--primary); }
+        .sidebar-divider { height:1px; background:var(--border); margin:6px 0; }
+        .sidebar-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--text3); padding:0 8px; margin-top:4px; }
+        .sidebar-dropdown-wrap { position:relative; }
+        .sidebar-dropdown-wrap select {
+            width:100%; padding:10px 12px; background:var(--surface2); border:1px solid var(--border);
+            border-radius:var(--radius-sm); color:var(--text); font-family:var(--font); font-size:0.85rem;
+            cursor:pointer; transition:all var(--transition); appearance:none; -webkit-appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0a0b0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat:no-repeat; background-position:right 12px center;
+        }
+        .sidebar-dropdown-wrap select:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 2px var(--primary-glow); }
+        .sidebar-back-btn {
+            display:none; padding:10px 14px; background:var(--surface2); border:1px solid var(--border);
+            border-radius:var(--radius-sm); color:var(--accent); font-weight:600; font-size:0.85rem;
+            cursor:pointer; transition:all var(--transition); font-family:var(--font); width:100%; text-align:center;
+        }
+        .sidebar-back-btn:hover { background:rgba(52,201,168,0.08); border-color:var(--accent); }
+        .main-content { flex:1; padding:20px; overflow-y:auto; max-height:100vh; }
+        .main-content.alt-mode { padding:16px; }
+        .tab-panel { display:none; animation:fadeSlide 0.25s ease; }
+        .tab-panel.active { display:block; }
+        @keyframes fadeSlide { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .alt-panel { display:none; animation:fadeSlide 0.25s ease; width:100%; max-width:700px; margin:0 auto; }
+        .alt-panel.active { display:block; }
+        .mobile-toggle {
+            display:none; position:fixed; top:12px; left:12px; z-index:100;
+            background:var(--surface); border:1px solid var(--border); border-radius:8px;
+            width:40px; height:40px; cursor:pointer; color:var(--text); font-size:1.2rem;
+            align-items:center; justify-content:center;
+        }
+        .sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9; }
+        .sidebar-overlay.show { display:block; }
+        .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:6px; font-weight:600; font-size:0.88rem; cursor:pointer; border:none; transition:all var(--transition); font-family:var(--font); letter-spacing:0.2px; white-space:nowrap; }
+        .btn:active { transform:scale(0.98); }
+        .btn-primary { background:var(--primary); color:#fff; box-shadow:0 2px 12px var(--primary-glow); }
+        .btn-primary:hover { background:#4a7fd9; box-shadow:0 4px 18px var(--primary-glow); transform:translateY(-1px); }
+        .btn-outline { background:transparent; border:1px solid var(--border); color:var(--text2); }
+        .btn-outline:hover { border-color:var(--primary); color:#fff; background:rgba(91,141,239,0.04); }
+        .btn-accent { background:var(--accent); color:#0a0a14; font-weight:700; }
+        .btn-small { padding:6px 12px; font-size:0.78rem; border-radius:5px; }
+        .btn:disabled { opacity:0.5; cursor:not-allowed; pointer-events:none; }
+        .toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%) translateY(120px); background:var(--surface2); color:#fff; padding:10px 22px; border-radius:8px; font-weight:600; font-size:0.85rem; border:1px solid var(--border); transition:0.3s; z-index:999; pointer-events:none; box-shadow:var(--shadow); }
+        .toast.show { transform:translateX(-50%) translateY(0); }
+        .loading-spinner { display:inline-block; width:18px; height:18px; border:2.5px solid transparent; border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+
+        /* NOTE TRANSLATOR STYLES */
+        .nt-container { width:100%; max-width:750px; margin:0 auto; background:var(--surface); border-radius:var(--radius); padding:24px 20px; box-shadow:var(--shadow); border:1px solid var(--border); position:relative; }
+        .nt-container::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); border-radius:var(--radius) var(--radius) 0 0; }
+        .nt-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+        .nt-logo { display:flex; align-items:center; gap:10px; }
+        .nt-logo-icon { width:40px; height:40px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+        .nt-badge { font-size:0.7rem; background:var(--surface2); color:var(--accent); padding:4px 10px; border-radius:20px; font-weight:600; border:1px solid rgba(52,201,168,0.2); }
+        .nt-status-row { display:flex; align-items:center; gap:10px; margin-bottom:16px; font-size:0.85rem; color:var(--text2); }
+        .nt-status-dot { width:10px; height:10px; border-radius:50%; background:#555; }
+        .nt-status-dot.listening { background:var(--danger); box-shadow:0 0 8px var(--danger); animation:dotBlink 0.8s infinite; }
+        @keyframes dotBlink { 0%,100% { opacity:1; } 50% { opacity:0.35; } }
+        .nt-live-transcript { background:var(--surface2); border-radius:8px; padding:14px 16px; margin-bottom:16px; min-height:48px; border:1px solid var(--border); font-size:0.9rem; color:#c8c8d8; font-style:italic; }
+        .nt-handwriting-row { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+        .nt-notes-section { background:var(--surface2); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); min-height:140px; max-height:380px; overflow-y:auto; line-height:1.6; }
+        .nt-notes-section h3 { font-size:1rem; margin:12px 0 6px; color:var(--accent); }
+        .nt-notes-section ul { list-style:none; padding-left:8px; }
+        .nt-notes-section li { margin-bottom:6px; color:#d0d0e0; }
+        .handwriting-img { height:1.2em; vertical-align:middle; margin:0 1px; }
+        .nt-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; z-index:1000; visibility:hidden; opacity:0; transition:0.3s; }
+        .nt-overlay.active { visibility:visible; opacity:1; }
+        .nt-tracing-card { background:#1e1e2a; border-radius:16px; padding:24px 16px; max-width:380px; width:95%; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.6); }
+        .nt-canvas-trace { background:#fff; border-radius:12px; margin:0 auto 14px; width:100%; max-width:260px; aspect-ratio:1/1; display:block; touch-action:none; }
+
+        /* STUDY AI STYLES */
+        .sa-container { width:100%; max-width:900px; margin:0 auto; }
+        .sa-header { text-align:center; padding:16px 0; }
+        .sa-logo-text { font-size:1.5rem; font-weight:700; letter-spacing:-0.3px; background:linear-gradient(135deg, #e1e1e6, #9bb5e8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .sa-input-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:20px; box-shadow:var(--shadow); }
+        .sa-input-section textarea { width:100%; min-height:160px; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text); padding:14px; font-family:var(--font); font-size:0.9rem; resize:vertical; line-height:1.6; }
+        .sa-input-section textarea:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 2px var(--primary-glow); }
+        .sa-results { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+        .sa-tabs { display:flex; border-bottom:1px solid var(--border); background:var(--surface2); overflow-x:auto; }
+        .sa-tab-btn { flex:1; min-width:80px; padding:12px 16px; background:transparent; border:none; color:var(--text3); font-weight:600; cursor:pointer; font-size:0.85rem; font-family:var(--font); white-space:nowrap; transition:all var(--transition); position:relative; }
+        .sa-tab-btn:hover { color:var(--text2); }
+        .sa-tab-btn.active { color:#fff; background:rgba(91,141,239,0.08); }
+        .sa-tab-btn.active::after { content:''; position:absolute; bottom:0; left:20%; width:60%; height:2px; background:var(--primary); border-radius:1px 1px 0 0; }
+        .sa-tab-content { display:none; padding:20px; animation:fadeSlide 0.3s ease; }
+        .sa-tab-content.active { display:block; }
+        .sa-guide-section { margin-bottom:16px; padding:16px; background:var(--surface2); border-radius:var(--radius-sm); border-left:3px solid var(--primary); }
+        .sa-guide-heading { font-weight:700; font-size:1rem; color:#fff; margin-bottom:8px; }
+        .sa-guide-bullet { padding:4px 0 4px 18px; color:var(--text2); font-size:0.85rem; position:relative; }
+        .sa-guide-bullet::before { content:'•'; position:absolute; left:4px; color:var(--primary); }
+        .sa-highlight { background:rgba(91,141,239,0.15); padding:1px 6px; border-radius:3px; font-weight:600; color:#9bb5e8; }
+        .sa-flashcard-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
+        .sa-flashcard { perspective:1000px; height:200px; cursor:pointer; }
+        .sa-flashcard-inner { position:relative; width:100%; height:100%; transition:transform 0.5s; transform-style:preserve-3d; }
+        .sa-flashcard.flipped .sa-flashcard-inner { transform:rotateY(180deg); }
+        .sa-flashcard-front, .sa-flashcard-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:var(--radius-sm); padding:14px 12px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; border:1px solid var(--border); overflow-y:auto; font-size:0.85rem; word-break:break-word; }
+        .sa-flashcard-front { background:#1f1f2e; color:#fff; font-weight:700; }
+        .sa-flashcard-back { background:#1a2e2a; color:var(--accent); transform:rotateY(180deg); border-color:rgba(52,201,168,0.2); }
+        .sa-quiz-q { background:var(--surface2); border-radius:var(--radius-sm); padding:16px; margin-bottom:12px; border:1px solid var(--border); }
+        .sa-quiz-opt { padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xs); cursor:pointer; font-size:0.85rem; color:var(--text2); margin:4px 0; transition:all var(--transition); font-family:var(--font); width:100%; text-align:left; }
+        .sa-quiz-opt:hover { border-color:var(--primary); }
+        .sa-quiz-opt.correct-answer { border-color:var(--success)!important; background:rgba(86,182,194,0.1)!important; color:var(--success)!important; font-weight:700; }
+        .sa-quiz-opt.wrong-answer { border-color:var(--danger)!important; background:rgba(224,108,117,0.1)!important; color:var(--danger)!important; }
+        .sa-quiz-opt:disabled { pointer-events:none; opacity:0.7; }
+        .sa-empty { text-align:center; padding:40px 20px; color:var(--text3); }
+        .sa-empty .big-icon { font-size:3rem; display:block; margin-bottom:12px; opacity:0.5; }
+
+        /* SAGE FELLOW FLOATING BUBBLE (TOP RIGHT) */
+        .sf-floating-bubble {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .sf-bubble-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+            transition: all var(--transition);
+            user-select: none;
+        }
+        .sf-bubble-icon:hover {
+            background: var(--surface2);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+            transform: translateY(-1px);
+        }
+        .sf-bubble-chat {
+            display: none;
+            width: 340px;
+            max-height: 480px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            margin-top: 8px;
+            overflow: hidden;
+            flex-direction: column;
+            animation: fadeSlide 0.2s ease;
+        }
+        .sf-bubble-chat.open {
+            display: flex;
+        }
+        .sf-bubble-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--surface2);
+            border-bottom: 1px solid var(--border);
+        }
+        .sf-bubble-header .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text3);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .sf-bubble-header .close-btn:hover { color: #fff; }
+        .sf-bubble-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.85rem;
+            max-height: 300px;
+        }
+        .sf-bubble-messages .sf-msg { max-width: 92%; }
+        .sf-bubble-messages .sf-msg-bubble {
+            padding: 8px 12px;
+            border-radius: 8px;
+            line-height: 1.4;
+        }
+        .sf-bubble-messages .user .sf-msg-bubble { background: var(--primary); color: #fff; }
+        .sf-bubble-messages .bot .sf-msg-bubble { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+        .sf-bubble-input {
+            display: flex;
+            gap: 6px;
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+        }
+        .sf-bubble-input input {
+            flex: 1;
+            padding: 10px 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.8rem;
+            outline: none;
+        }
+        .sf-bubble-input input:focus { border-color: var(--primary); }
+        .sf-bubble-input button {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+        .sf-bubble-credit {
+            font-size: 0.65rem;
+            color: var(--text3);
+            text-align: center;
+            padding: 4px 0 8px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .sidebar { position:fixed; left:0; top:0; height:100%; transform:translateX(-100%); width:250px; z-index:20; }
+            .sidebar.open { transform:translateX(0); }
+            .sidebar-overlay.show { display:block; }
+            .mobile-toggle { display:flex; }
+            .main-content { padding:16px 12px; padding-top:50px; }
+            .sa-flashcard-grid { grid-template-columns:1fr; }
+            .sa-tab-btn { font-size:0.75rem; padding:10px 12px; min-width:60px; }
+            .sf-floating-bubble { top: 10px; right: 10px; }
+            .sf-bubble-chat { width: 300px; }
+            .nt-container { padding:16px 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+    <button class="mobile-toggle" id="mobileToggle" title="Menu">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo"><div class="logo-dot">⚡</div> AI Hub</div>
+        <div class="sidebar-label">Main Tools</div>
+        <nav class="sidebar-nav" id="mainNav">
+            <button class="active" data-tab="note-translator">🎙️ Note Translator</button>
+            <button data-tab="study-ai">📚 Study AI</button>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-label">Other AI Tools</div>
+        <div class="sidebar-dropdown-wrap">
+            <select id="otherAiSelect">
+                <option value="">-- Select a tool --</option>
+                <option value="stocksight">📈 StockSight AI</option>
+                <option value="fisher">🎣 Fisher AI</option>
+            </select>
+        </div>
+        <button class="sidebar-back-btn" id="sidebarBackBtn" title="Return to main tools">← Back to Main Tools</button>
+        <div class="sidebar-info" style="margin-top:auto;padding-top:16px;">⚠️ AI tools for educational purposes.<br>Not financial or professional advice.</div>
+    </aside>
+    <main class="main-content" id="mainContent">
+        <!-- Note Translator Panel -->
+        <div class="tab-panel active" id="panel-note-translator">
+            <div class="nt-container" id="ntRoot">
+                <div class="nt-header"><div class="nt-logo"><div class="nt-logo-icon">🎙️</div><strong style="font-size:1.1rem;">AI Note Generator</strong></div><span class="nt-badge">🧠 Your Handwriting</span></div>
+                <div class="nt-status-row"><div class="nt-status-dot" id="ntStatusDot"></div><span id="ntStatusText">Ready — click to start listening</span></div>
+                <div style="font-size:0.7rem;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">🎤 Live Transcript</div>
+                <div class="nt-live-transcript" id="ntLiveTranscript">(Waiting for speech...)</div>
+                <div class="nt-handwriting-row">
+                    <button class="btn btn-outline" id="ntBtnStartTracing" style="border-color:#d4b58c;color:#f0e6d3;">✍️ Trace a‑z (Your Handwriting)</button>
+                    <span style="font-size:0.8rem;color:var(--text2);" id="ntHandwritingStatusLabel">Trace all 26 letters to unlock</span>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+                    <button class="btn btn-primary" id="ntBtnListen"><span id="ntBtnIcon">▶</span> <span id="ntBtnLabel">Start Listening</span></button>
+                    <button class="btn btn-outline btn-small" id="ntBtnProcessNow">⚡ Process Now</button>
+                    <button class="btn btn-outline btn-small" id="ntBtnClear">🗑 Clear All</button>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <span style="font-weight:700;color:#c8c8d8;">📋 Bullet Points</span>
+                    <div style="display:flex;gap:6px;">
+                        <button class="btn btn-accent btn-small" id="ntBtnDownload">💾 Download</button>
+                        <button class="btn btn-outline btn-small" id="ntBtnCopy">📋 Copy</button>
+                    </div>
+                </div>
+                <div class="nt-notes-section" id="ntNotesContainer"></div>
+            </div>
+            <div class="nt-overlay" id="ntTracingOverlay">
+                <div class="nt-tracing-card">
+                    <h3 style="color:#fff;margin-bottom:8px;">✍️ Trace letter</h3>
+                    <div style="font-size:2rem;color:#f7b731;margin-bottom:10px;" id="ntCurrentLetterDisplay">a</div>
+                    <div style="color:#ccc;margin:6px 0;font-size:0.85rem;" id="ntProgressText">Letter 1 / 26</div>
+                    <canvas id="ntTraceCanvas" class="nt-canvas-trace" width="300" height="300"></canvas>
+                    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+                        <button class="btn btn-outline btn-small" id="ntBtnClearTrace">🧽 Clear</button>
+                        <button class="btn btn-primary" id="ntBtnSubmitTrace">✔ Save & Next</button>
+                    </div>
+                    <p style="color:#aaa;margin-top:8px;font-size:0.8rem;" id="ntTraceFeedback"></p>
+                    <button class="btn btn-small" style="background:transparent;border-color:#555;color:#aaa;margin-top:8px;" id="ntBtnCloseOverlay">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <!-- Study AI Panel -->
+        <div class="tab-panel" id="panel-study-ai">
+            <div class="sa-container" id="saRoot">
+                <div class="sa-header"><span class="sa-logo-text">🧠 Study AI</span><p style="color:var(--text3);font-size:0.9rem;">Paste your notes • Get study guides, flashcards & quizzes</p></div>
+                <div class="sa-input-section">
+                    <textarea id="saNotesInput" placeholder="Paste your study notes here...&#10;&#10;Example: The mitochondria is the powerhouse of the cell. Photosynthesis converts sunlight into energy..."></textarea>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+                        <button class="btn btn-primary" id="saBtnProcess">✨ Generate Study Materials</button>
+                        <button class="btn btn-outline" id="saBtnDemo">📋 Load Demo</button>
+                        <button class="btn btn-outline btn-small" id="saBtnClear">🗑 Clear</button>
+                    </div>
+                </div>
+                <div class="sa-results" id="saResultsContainer" style="display:none;">
+                    <div class="sa-tabs" id="saTabs">
+                        <button class="sa-tab-btn active" data-satab="guide">📖 Study Guide</button>
+                        <button class="sa-tab-btn" data-satab="flashcards">🃏 Flashcards</button>
+                        <button class="sa-tab-btn" data-satab="quiz">✅ Mini Quiz</button>
+                    </div>
+                    <div class="sa-tab-content active" id="saTabGuide"></div>
+                    <div class="sa-tab-content" id="saTabFlashcards"></div>
+                    <div class="sa-tab-content" id="saTabQuiz"></div>
+                </div>
+            </div>
+        </div>
+        <div class="alt-panel" id="altPanel"></div>
+    </main>
+</div>
+
+<!-- Floating Sage Fellow 1.0 bubble -->
+<div class="sf-floating-bubble" id="sfFloatingBubble">
+    <div class="sf-bubble-icon" id="sfBubbleIcon">🌐</div>
+    <div class="sf-bubble-chat" id="sfBubbleChat">
+        <div class="sf-bubble-header">
+            <strong style="font-size:0.9rem;">Sage Fellow 1.0</strong>
+            <button class="close-btn" id="sfCloseBubble">✕</button>
+        </div>
+        <div class="sf-bubble-messages" id="sfBubbleMessages">
+            <div class="sf-msg bot"><div class="sf-msg-bubble">👋 Hi! I'm Sage Fellow 1.0, created by <strong>aim and 32sharmaa</strong>. Ask me anything!</div></div>
+        </div>
+        <div class="sf-bubble-input">
+            <input type="text" id="sfBubbleInput" placeholder="Message..." maxlength="800">
+            <button id="sfBubbleSendBtn">Send</button>
+        </div>
+        <div class="sf-bubble-credit">Made by aim & 32sharmaa</div>
+    </div>
+</div>
+
+<div class="toast" id="globalToast"></div>
+
+<!-- Load API keys from external config file -->
+<script src="config.js"></script>
+<script>
+(function() {
+    // Now GROQ_API_KEY is available from config.js
+    const GROQ_ENDPOINT = 'https://api.groq.com/openai/v1/chat/completions';
+
+    const mainContent = document.getElementById('mainContent');
+    const altPanel = document.getElementById('altPanel');
+    const sidebarBackBtn = document.getElementById('sidebarBackBtn');
+    const otherAiSelect = document.getElementById('otherAiSelect');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const mobileToggle = document.getElementById('mobileToggle');
+    const globalToast = document.getElementById('globalToast');
+    let currentAltView = null;
+
+    function showToast(msg) {
+        globalToast.textContent = msg; globalToast.classList.add('show');
+        clearTimeout(globalToast._timeout);
+        globalToast._timeout = setTimeout(() => globalToast.classList.remove('show'), 2200);
+    }
+
+    const navButtons = document.querySelectorAll('#mainNav button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    function switchMainTab(tabName) {
+        navButtons.forEach(b => b.classList.remove('active'));
+        const activeBtn = document.querySelector(`#mainNav button[data-tab="${tabName}"]`);
+        if(activeBtn) activeBtn.classList.add('active');
+        tabPanels.forEach(p => p.classList.remove('active'));
+        const panel = document.getElementById('panel-'+tabName);
+        if(panel) panel.classList.add('active');
+        altPanel.classList.remove('active'); altPanel.innerHTML = '';
+        currentAltView = null; otherAiSelect.value = '';
+        sidebarBackBtn.style.display = 'none';
+        mainContent.classList.remove('alt-mode');
+        if(tabName==='study-ai' && typeof saRenderAll==='function') saRenderAll();
+        if(tabName==='note-translator' && typeof ntRenderAllNotes==='function') ntRenderAllNotes();
+        sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show');
+    }
+    navButtons.forEach(btn => btn.addEventListener('click', ()=> switchMainTab(btn.dataset.tab)));
+    otherAiSelect.addEventListener('change', function(){
+        const val = this.value;
+        if(!val) { if(currentAltView) switchMainTab('note-translator'); return; }
+        loadAltView(val);
+    });
+    sidebarBackBtn.addEventListener('click', ()=>{ switchMainTab('note-translator'); otherAiSelect.value=''; sidebarBackBtn.style.display='none'; });
+    function loadAltView(viewName){
+        currentAltView = viewName;
+        tabPanels.forEach(p=>p.classList.remove('active'));
+        navButtons.forEach(b=>b.classList.remove('active'));
+        altPanel.classList.add('active'); mainContent.classList.add('alt-mode');
+        sidebarBackBtn.style.display = 'block'; otherAiSelect.value = viewName;
+        altPanel.innerHTML = '<div style="text-align:center;padding:40px;"><span class="loading-spinner"></span> Loading tool...</div>';
+        if(viewName==='stocksight') renderStockSight();
+        else if(viewName==='fisher') renderFisher();
+        sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show');
+    }
+    mobileToggle.addEventListener('click', ()=>{ sidebar.classList.toggle('open'); sidebarOverlay.classList.toggle('show'); });
+    sidebarOverlay.addEventListener('click', ()=>{ sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show'); });
+    window.showGlobalToast = showToast;
+
+    // Note Translator (unchanged)
+    (function(){
+        const btnListen = document.getElementById('ntBtnListen'), btnIcon = document.getElementById('ntBtnIcon'), btnLabel = document.getElementById('ntBtnLabel');
+        const statusDot = document.getElementById('ntStatusDot'), statusText = document.getElementById('ntStatusText');
+        const liveTranscript = document.getElementById('ntLiveTranscript'), notesContainer = document.getElementById('ntNotesContainer');
+        const btnStartTracing = document.getElementById('ntBtnStartTracing'), handwritingStatusLabel = document.getElementById('ntHandwritingStatusLabel');
+        const overlay = document.getElementById('ntTracingOverlay'), traceCanvas = document.getElementById('ntTraceCanvas');
+        const currentLetterDisplay = document.getElementById('ntCurrentLetterDisplay'), progressText = document.getElementById('ntProgressText'), traceFeedback = document.getElementById('ntTraceFeedback');
+        let recognition=null, isListening=false, fullTranscript='', interimTranscript='', allGeneratedNotes=[];
+        let handwritingActive=false; const LETTERS='abcdefghijklmnopqrstuvwxyz'.split('');
+        let handwritingLetterImages={}, currentTraceIndex=0, traceCtx=traceCanvas.getContext('2d');
+        let userStrokesCanvas=document.createElement('canvas'); userStrokesCanvas.width=300; userStrokesCanvas.height=300;
+        let userStrokesCtx=userStrokesCanvas.getContext('2d'), guideImage=null, isDrawing=false;
+
+        function setStatus(state){ statusDot.className='nt-status-dot'; if(state==='listening'){statusDot.classList.add('listening');statusText.textContent='🔴 Listening...';}else statusText.textContent='Ready — click to start listening';}
+        function updateUIForListening(active){ if(active){btnIcon.textContent='⏹';btnLabel.textContent='Stop';liveTranscript.style.borderColor='var(--primary)';}else{btnIcon.textContent='▶';btnLabel.textContent='Start Listening';liveTranscript.style.borderColor='var(--border)';}}
+        function createGuide(letter){ const off=document.createElement('canvas');off.width=300;off.height=300;const ctx=off.getContext('2d');ctx.font='italic 150px "Caveat", cursive';ctx.fillStyle='#d0d0d0';ctx.textBaseline='middle';ctx.textAlign='center';ctx.fillText(letter,150,160);return off;}
+        function loadLetter(index){ guideImage=createGuide(LETTERS[index]);clearTraceCanvas();currentLetterDisplay.textContent=LETTERS[index];progressText.textContent=`Letter ${index+1} / 26`;}
+        function clearTraceCanvas(){ traceCtx.clearRect(0,0,300,300);userStrokesCtx.clearRect(0,0,300,300);if(guideImage)traceCtx.drawImage(guideImage,0,0);}
+        function openOverlay(){ currentTraceIndex=0;overlay.classList.add('active');loadLetter(0);traceFeedback.textContent='';}
+        function closeOverlay(){ overlay.classList.remove('active');}
+        function captureLetterImage(){ const clean=document.createElement('canvas');clean.width=300;clean.height=300;clean.getContext('2d').drawImage(userStrokesCanvas,0,0);return clean.toDataURL('image/png');}
+        function nextLetter(){ const letter=LETTERS[currentTraceIndex];handwritingLetterImages[letter]=captureLetterImage();if(currentTraceIndex<LETTERS.length-1){currentTraceIndex++;loadLetter(currentTraceIndex);traceFeedback.textContent='';}else{handwritingActive=true;handwritingStatusLabel.textContent='✅ Handwriting unlocked!';showToast('✍️ Your handwriting is now active!');closeOverlay();ntRenderAllNotes();}}
+        function startDraw(e){ e.preventDefault();isDrawing=true;const pos=getPos(e);traceCtx.beginPath();traceCtx.moveTo(pos.x,pos.y);userStrokesCtx.beginPath();userStrokesCtx.moveTo(pos.x,pos.y);}
+        function draw(e){ if(!isDrawing)return;e.preventDefault();const pos=getPos(e);traceCtx.lineTo(pos.x,pos.y);traceCtx.strokeStyle='#7c5cfc';traceCtx.lineWidth=5;traceCtx.lineCap='round';traceCtx.stroke();userStrokesCtx.lineTo(pos.x,pos.y);userStrokesCtx.strokeStyle='#7c5cfc';userStrokesCtx.lineWidth=5;userStrokesCtx.lineCap='round';userStrokesCtx.stroke();}
+        function stopDraw(){ isDrawing=false;traceCtx.beginPath();userStrokesCtx.beginPath();}
+        function getPos(e){ const rect=traceCanvas.getBoundingClientRect();const scaleX=300/rect.width,scaleY=300/rect.height;const clientX=e.touches?e.touches[0].clientX:e.clientX;const clientY=e.touches?e.touches[0].clientY:e.clientY;return{x:(clientX-rect.left)*scaleX,y:(clientY-rect.top)*scaleY};}
+        traceCanvas.addEventListener('mousedown',startDraw);traceCanvas.addEventListener('mousemove',draw);traceCanvas.addEventListener('mouseup',stopDraw);traceCanvas.addEventListener('mouseleave',stopDraw);
+        traceCanvas.addEventListener('touchstart',startDraw,{passive:false});traceCanvas.addEventListener('touchmove',draw,{passive:false});traceCanvas.addEventListener('touchend',stopDraw);
+        document.getElementById('ntBtnClearTrace').onclick=()=>{loadLetter(currentTraceIndex);traceFeedback.textContent='';};
+        document.getElementById('ntBtnSubmitTrace').onclick=()=>{const pixels=userStrokesCtx.getImageData(0,0,300,300).data;let hasDrawing=false;for(let i=0;i<pixels.length;i+=4)if(pixels[i+3]>0){hasDrawing=true;break;}if(!hasDrawing){traceFeedback.textContent='Please draw the letter first.';return;}traceFeedback.textContent='Saved!';setTimeout(()=>nextLetter(),200);};
+        document.getElementById('ntBtnCloseOverlay').onclick=closeOverlay;btnStartTracing.onclick=openOverlay;
+
+        function setupRecognition(){ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){showToast('Speech not supported.');return null;}const rec=new SR();rec.continuous=true;rec.interimResults=true;rec.lang='en-US';rec.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)fullTranscript+=' '+e.results[i][0].transcript.trim();else interim+=e.results[i][0].transcript;}interimTranscript=interim;liveTranscript.textContent=(fullTranscript+' '+interim).trim()||'(Listening...)';};rec.onerror=e=>{if(e.error==='not-allowed'){stopListening();showToast('Microphone denied.');}};rec.onend=()=>{if(isListening)rec.start();else{updateUIForListening(false);setStatus('idle');}};return rec;}
+        function startListening(){ if(!recognition)recognition=setupRecognition();if(!recognition)return;fullTranscript='';interimTranscript='';liveTranscript.textContent='(Listening...)';isListening=true;updateUIForListening(true);setStatus('listening');recognition.start();}
+        function stopListening(){ isListening=false;updateUIForListening(false);if(recognition)recognition.stop();const combined=(fullTranscript+' '+interimTranscript).trim();if(combined.length>10)processTranscript(combined);fullTranscript='';interimTranscript='';liveTranscript.textContent='(Waiting...)';setStatus('idle');}
+        btnListen.onclick=()=>isListening?stopListening():startListening();
+
+        function processTranscript(text){ const bullets=generateBullets(text);if(bullets.length){const now=new Date();const time=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});const date=now.toLocaleDateString([],{month:'short',day:'numeric'});allGeneratedNotes.push({title:`Session — ${date} ${time}`,bullets,raw:text.substring(0,200)});ntRenderAllNotes();showToast(`✅ ${bullets.length} bullet points.`);}}
+        function generateBullets(t){ let clean=t.replace(/\b(um|uh|er|ah|like|you know|i mean|sort of|kind of|basically|actually|literally|just|really|very)\b/gi,'').replace(/\s{2,}/g,' ').trim();let sentences=clean.split(/(?<=[.!?])\s+/).filter(s=>s.length>8);if(!sentences.length)sentences=clean.split(/\s*(?:,|;|\s+(?:and|or|but|so|then|also|plus|however|therefore|because)\s+)\s*/i).filter(s=>s.length>6).map(s=>s.trim());const main=[],sub=[];const kw=['important','key','note','first','second','third','finally','next','action item','todo','follow up','summary','conclusion'];sentences.forEach(s=>{const low=s.toLowerCase();if(/^(first|second|third|next|finally|additionally|moreover|furthermore|also|plus|another|the main|a key|an important)\b/i.test(low)||kw.some(k=>low.includes(k)))main.push(s);else if(main.length)sub.push({parent:main.length-1,text:s});else main.push(s);});const res=[];main.forEach((m,i)=>{res.push({text:m,type:'main'});sub.filter(s=>s.parent===i).forEach(s=>res.push({text:s.text,type:'sub'}));});return res;}
+        function textToHandwritingHTML(str){ if(!handwritingActive||Object.keys(handwritingLetterImages).length<26)return str;let html='';for(const ch of str){const lower=ch.toLowerCase();if(LETTERS.includes(lower)&&handwritingLetterImages[lower]){html+=`<img src="${handwritingLetterImages[lower]}" class="handwriting-img" alt="${ch}">`;}else{html+=ch;}}return html;}
+        function ntRenderAllNotes(){ if(!allGeneratedNotes.length){notesContainer.innerHTML='';return;}let html='';allGeneratedNotes.forEach((g,i)=>{html+=`<h3>📌 ${g.title}</h3><ul>`;g.bullets.forEach(b=>{const cls=b.type==='sub'?'style="padding-left:28px;font-size:0.9rem;opacity:0.9;"':'';html+=`<li ${cls}>${textToHandwritingHTML(b.text)}</li>`;});html+=`</ul><div style="font-size:0.7rem;color:#666;margin-top:8px;">🕒 ${g.raw}</div>`;if(i<allGeneratedNotes.length-1)html+='<hr style="border-color:#2a2a3a;margin:14px 0;">';});notesContainer.innerHTML=html;}
+        window.ntRenderAllNotes=ntRenderAllNotes;
+        function generateDownloadHTML(){ const notesHTML=notesContainer.innerHTML;const now=new Date();const date=now.toLocaleDateString([],{month:'long',day:'numeric',year:'numeric'});const time=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>My Notes – ${date}</title><style>body{font-family:Inter,sans-serif;max-width:700px;margin:40px auto;padding:30px;background:#fff;color:#1a1a2e;}h3{color:#00b894}ul{list-style:none;padding-left:8px}li{margin-bottom:6px;}.handwriting-img{height:1.2em;vertical-align:middle;}</style></head><body><h1>🎙️ My Handwritten Notes</h1><p>${date} ${time}</p>${notesHTML}</body></html>`;}
+        document.getElementById('ntBtnProcessNow').onclick=()=>{const combined=(fullTranscript+' '+interimTranscript).trim();if(combined.length>8){processTranscript(combined);fullTranscript='';interimTranscript='';liveTranscript.textContent='(Waiting...)';}else showToast('Not enough speech.');};
+        document.getElementById('ntBtnClear').onclick=()=>{fullTranscript='';interimTranscript='';allGeneratedNotes=[];liveTranscript.textContent='(Waiting...)';notesContainer.innerHTML='';if(isListening)stopListening();};
+        document.getElementById('ntBtnDownload').onclick=()=>{if(!allGeneratedNotes.length)return showToast('No notes.');const blob=new Blob([generateDownloadHTML()],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`my-notes-${Date.now()}.html`;a.click();};
+        document.getElementById('ntBtnCopy').onclick=()=>{let text='';allGeneratedNotes.forEach(g=>{text+=`📌 ${g.title}\n`;g.bullets.forEach(b=>text+=`${b.type==='sub'?'   ◦ ':'▸ '}${b.text}\n`);});navigator.clipboard.writeText(text).then(()=>showToast('Copied!'));};
+        document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.shiftKey&&e.key==='L'){e.preventDefault();btnListen.click();}});
+        setStatus('idle');recognition=setupRecognition();
+    })();
+
+    // Study AI (unchanged)
+    (function(){
+        const notesInput=document.getElementById('saNotesInput'),btnProcess=document.getElementById('saBtnProcess'),btnDemo=document.getElementById('saBtnDemo'),btnClear=document.getElementById('saBtnClear');
+        const resultsContainer=document.getElementById('saResultsContainer'),tabGuide=document.getElementById('saTabGuide'),tabFlashcards=document.getElementById('saTabFlashcards'),tabQuiz=document.getElementById('saTabQuiz');
+        let studyGuideData=[],flashcardData=[],quizData=[],quizAnswered={},quizScore=0,allKeywords=[],allDefinitions=[];
+        const STOP_WORDS=new Set(['the','is','a','an','of','and','to','in','that','it','with','for','on','are','be','this','was','as','by','at','or','from','has','have','had','not','but','what','all','were','when','we','they','can','said','there','use','each','which','she','do','how','their','will','other','about','out','many','then','them','these','so','some','her','would','make','like','him','into','time','no','way','could','my','than','first','been','its','who','now','people','also','very','just','after','over','such','because','any','more','new','our','may','here','most','up','if','where','only','those','through','during','before','between','while','being','does','i','me','you','your','he','his','himself','we','us','our','ours','myself','yourself','yourselves','ourselves','themselves','am','been','being','having','doing','did','done','get','got','go','went','come','came','see','know','think','say']);
+        function splitSentences(text){const cleaned=text.replace(/\s+/g,' ').trim();const sentences=[];const regex=/[^.!?…]+[.!?…]+["'»)]*\s*/g;let match;while((match=regex.exec(cleaned))!==null){const s=match[0].trim();if(s.length>5)sentences.push(s);}if(sentences.length===0&&cleaned.length>10)sentences.push(cleaned);return sentences;}
+        function getWords(text){return text.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(w=>w.length>1);}
+        function extractKeywords(sentences){const wordFreq={};sentences.forEach(s=>{getWords(s).forEach(w=>{if(!STOP_WORDS.has(w)&&w.length>2)wordFreq[w]=(wordFreq[w]||0)+1;});});const bigramFreq={};sentences.forEach(s=>{const words=s.split(/\s+/);for(let i=0;i<words.length-1;i++){const w1=words[i].replace(/[^a-zA-Z]/g,''),w2=words[i+1].replace(/[^a-zA-Z]/g,'');if(w1.length>2&&w2.length>2&&w1[0]===w1[0].toUpperCase()&&w2[0]===w2[0].toUpperCase()&&!STOP_WORDS.has(w1.toLowerCase())&&!STOP_WORDS.has(w2.toLowerCase()))bigramFreq[w1+' '+w2]=(bigramFreq[w1+' '+w2]||0)+1;}});const keywords=[];Object.entries(wordFreq).forEach(([word,freq])=>{if(freq>=2||(freq===1&&word.length>5))keywords.push({word,freq,type:'unigram'});});Object.entries(bigramFreq).forEach(([bigram,freq])=>{if(freq>=1)keywords.push({word:bigram,freq:freq+1,type:'bigram'});});keywords.sort((a,b)=>b.freq-a.freq);return keywords.slice(0,40);}
+        function scoreSentence(sentence,keywords,index,total){let score=0;const lower=sentence.toLowerCase();keywords.forEach(kw=>{if(lower.includes(kw.word.toLowerCase()))score+=kw.freq;});if(index===0||index===total-1)score+=3;if(index<3)score+=1;const wc=getWords(sentence).length;if(wc<4)score-=1;if(wc>8)score+=1;if(/\b(is|are|means|refers to|defined as|consists of|involves)\b/i.test(sentence))score+=2;return score;}
+        function findDefinitions(sentences){const definitions=[];const patterns=[/(.{2,80}?)\s+(is|are)\s+(.{3,120}?)[.!?]/gi,/(.{2,80}?)\s+(means|refers to|defined as|describes)\s+(.{3,120}?)[.!?]/gi,/(.{3,60}?)\s*:\s*(.{3,120}?)[.!?]/g];sentences.forEach(sentence=>{patterns.forEach(pattern=>{[...sentence.matchAll(pattern)].forEach(m=>{let term=(m[1]||'').trim(),def=(m[3]||m[2]||'').trim();if(def.length<8&&m[3])def=m[3].trim();if(term.length>2&&def.length>5&&!STOP_WORDS.has(term.toLowerCase().split(/\s+/)[0])&&term.length<80&&def.length<200){term=term.replace(/^(the|a|an)\s+/i,'').trim();def=def.replace(/^(is|are|means|refers to|defined as)\s+/i,'').trim();if(term&&def&&term.length>1&&def.length>3)definitions.push({term:term.charAt(0).toUpperCase()+term.slice(1),definition:def.charAt(0).toUpperCase()+def.slice(1)});}});});});const seen=new Set();return definitions.filter(d=>{const key=d.term.toLowerCase();if(seen.has(key))return false;seen.add(key);return true;}).slice(0,20);}
+        function generateStudyGuide(sentences,keywords,definitions){const scored=sentences.map((s,i)=>({sentence:s,score:scoreSentence(s,keywords,i,sentences.length),index:i}));scored.sort((a,b)=>b.score-a.score);const top=scored.slice(0,Math.min(22,Math.ceil(sentences.length*0.65)));const groups={},usedKw=keywords.slice(0,12);top.forEach(item=>{let bestKw=null,bestScore=0;usedKw.forEach(kw=>{if(item.sentence.toLowerCase().includes(kw.word.toLowerCase())&&kw.freq>bestScore){bestScore=kw.freq;bestKw=kw.word;}});const key=bestKw||'Key Points';if(!groups[key])groups[key]=[];groups[key].push(item);});const sections=[];if(definitions.length)sections.push({type:'definitions',topic:'📚 Key Definitions',items:definitions.slice(0,8)});Object.entries(groups).forEach(([topic,items])=>{items.sort((a,b)=>a.index-b.index);const uniq=[];const seen=new Set();items.forEach(it=>{const n=it.sentence.toLowerCase().slice(0,40);if(!seen.has(n)){seen.add(n);uniq.push(it.sentence);}});sections.push({type:'sentences',topic,sentences:uniq.slice(0,8),isKeyPoints:topic==='Key Points'});});sections.sort((a,b)=>{if(a.type==='definitions')return-1;if(b.type==='definitions')return 1;if(a.isKeyPoints&&!b.isKeyPoints)return 1;if(!a.isKeyPoints&&b.isKeyPoints)return-1;return 0;});return sections;}
+        function generateFlashcards(sentences,keywords,definitions){const cards=[];definitions.forEach(def=>cards.push({front:def.term,back:def.definition,type:'definition'}));const scored=sentences.map((s,i)=>({sentence:s,score:scoreSentence(s,keywords,i,sentences.length)}));scored.sort((a,b)=>b.score-a.score);const topForCards=scored.slice(0,Math.min(24,sentences.length));topForCards.forEach(item=>{const words=item.sentence.split(/\s+/);if(words.length<5)return;let bestWord=null,bestScore=0;words.forEach(w=>{const clean=w.replace(/[^a-zA-Z]/g,'');if(clean.length>3&&!STOP_WORDS.has(clean.toLowerCase())&&keywords.some(kw=>kw.word.toLowerCase()===clean.toLowerCase())){const kwScore=(keywords.find(kw=>kw.word.toLowerCase()===clean.toLowerCase())||{}).freq||0;if(kwScore>bestScore){bestScore=kwScore;bestWord=clean;}}});if(bestWord){const question=item.sentence.replace(new RegExp('\\b'+bestWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i'),'________');cards.push({front:'Fill in: '+question,back:bestWord+'\n\nOriginal: '+item.sentence,type:'fill-in'});}});const seen=new Set(),uniq=[];cards.forEach(c=>{const key=c.front.toLowerCase().slice(0,50);if(!seen.has(key)&&c.back.length>1){seen.add(key);uniq.push(c);}});return uniq.slice(0,24);}
+        function generateQuiz(sentences,keywords){const questions=[];const scored=sentences.map((s,i)=>({sentence:s,score:scoreSentence(s,keywords,i,sentences.length),index:i}));scored.sort((a,b)=>b.score-a.score);const topSent=scored.slice(0,Math.min(18,sentences.length));const allTerms=keywords.map(k=>k.word).filter(w=>w.split(/\s+/).length<=2);topSent.forEach(item=>{if(questions.length>=12)return;const words=item.sentence.split(/\s+/);let targetWord=null;for(const w of words){const clean=w.replace(/[^a-zA-Z\s]/g,'').trim();if(clean.length>3&&!STOP_WORDS.has(clean.toLowerCase())&&allTerms.some(t=>t.toLowerCase()===clean.toLowerCase())&&clean.split(/\s+/).length===1){targetWord=clean;break;}}if(!targetWord)return;const questionText=item.sentence.replace(new RegExp('\\b'+targetWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i'),'<strong style="color:#d4a373;">________</strong>');const distractors=allTerms.filter(t=>t.toLowerCase()!==targetWord.toLowerCase()&&t.split(/\s+/).length===1&&t.length>3).sort(()=>Math.random()-0.5).slice(0,6);const chosen=[];for(const d of distractors){if(chosen.length>=3)break;if(!chosen.some(cd=>cd.toLowerCase()===d.toLowerCase()))chosen.push(d);}while(chosen.length<3){const fake='Option_'+(chosen.length+1);if(!chosen.includes(fake)&&fake.toLowerCase()!==targetWord.toLowerCase())chosen.push(fake);}const options=[targetWord,...chosen.slice(0,3)];for(let i=options.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[options[i],options[j]]=[options[j],options[i]];}questions.push({question:questionText,options,correctAnswer:targetWord,type:'multiple-choice',explanation:`The term "${targetWord}" is a key concept mentioned in your notes.`});});const used=new Set(questions.map(q=>q.question.replace(/<[^>]+>/g,'')));const tfCandidates=scored.filter(s=>!used.has(s.sentence)&&getWords(s.sentence).length>6);tfCandidates.slice(0,5).forEach(item=>{if(questions.length>=12)return;const words=item.sentence.split(/\s+/);const cleanWords=words.map(w=>w.replace(/[^a-zA-Z]/g,'')).filter(w=>w.length>3&&!STOP_WORDS.has(w.toLowerCase()));if(cleanWords.length<2)return;const targetIdx=Math.floor(Math.random()*Math.min(cleanWords.length,Math.ceil(cleanWords.length/2)));const targetWord=cleanWords[targetIdx];if(!targetWord||targetWord.length<3)return;const distractor=allTerms.find(t=>t.toLowerCase()!==targetWord.toLowerCase()&&t.split(/\s+/).length===1&&t.length>3&&Math.abs(t.length-targetWord.length)<=4);if(!distractor)return;const falseSentence=item.sentence.replace(new RegExp('\\b'+targetWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','i'),distractor);const isTrue=Math.random()>0.5;questions.push({question:isTrue?item.sentence:falseSentence,options:['True','False'],correctAnswer:isTrue?'True':'False',type:'true-false',explanation:isTrue?'This statement is true as described in your notes.':`This is false. The original notes state: "${item.sentence}"`});});return questions.slice(0,12);}
+        function escapeHTML(str){const div=document.createElement('div');div.textContent=str;return div.innerHTML;}
+        function saRenderGuide(){if(!studyGuideData.length){tabGuide.innerHTML='<div class="sa-empty"><span class="big-icon">📖</span><p>No study guide generated yet.</p></div>';return;}let html='';studyGuideData.forEach((section,i)=>{if(section.type==='definitions'){html+=`<div class="sa-guide-section"><div class="sa-guide-heading">📚 Key Definitions</div>`;section.items.forEach(def=>html+=`<div class="sa-guide-bullet"><span class="sa-highlight">${escapeHTML(def.term)}</span>: ${escapeHTML(def.definition)}</div>`);html+='</div>';}else{html+=`<div class="sa-guide-section"><div class="sa-guide-heading">📌 ${escapeHTML(section.topic)}</div>`;section.sentences.forEach(s=>{let highlighted=escapeHTML(s);allKeywords.slice(0,15).forEach(kw=>{const regex=new RegExp('\\b('+kw.word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')\\b','gi');highlighted=highlighted.replace(regex,'<span class="sa-highlight">$1</span>');});html+=`<div class="sa-guide-bullet">${highlighted}</div>`;});html+='</div>';}});tabGuide.innerHTML=html;}
+        function saRenderFlashcards(){if(!flashcardData.length){tabFlashcards.innerHTML='<div class="sa-empty"><span class="big-icon">🃏</span><p>No flashcards generated.</p></div>';return;}let html=`<p style="text-align:center;color:var(--text3);margin-bottom:12px;">🃏 <strong>${flashcardData.length} flashcards</strong> — Click to flip</p><div class="sa-flashcard-grid">`;flashcardData.forEach((card,i)=>{html+=`<div class="sa-flashcard" id="saFlashcard-${i}" onclick="window.saFlipCard(${i})"><div class="sa-flashcard-inner"><div class="sa-flashcard-front"><span>${escapeHTML(card.front)}</span><span style="font-size:0.65rem;color:var(--text3);margin-top:6px;">Click →</span></div><div class="sa-flashcard-back"><span style="white-space:pre-line;">${escapeHTML(card.back)}</span></div></div></div>`;});html+='</div><div style="text-align:center;margin-top:12px;"><button class="btn btn-outline btn-small" onclick="window.saFlipAll()">🔄 Flip All</button></div>';tabFlashcards.innerHTML=html;}
+        function saRenderQuiz(){if(!quizData.length){tabQuiz.innerHTML='<div class="sa-empty"><span class="big-icon">✅</span><p>No quiz generated.</p></div>';return;}quizAnswered={};quizScore=0;let html=`<p style="text-align:center;color:var(--text3);margin-bottom:12px;">📝 <strong>${quizData.length} questions</strong></p>`;quizData.forEach((q,i)=>{html+=`<div class="sa-quiz-q" id="saQuizQ-${i}"><div style="font-weight:700;margin-bottom:8px;">${i+1}. ${q.question}</div>`;q.options.forEach((opt,j)=>{html+=`<button class="sa-quiz-opt" id="saQuizOpt-${i}-${j}" onclick="window.saAnswerQuiz(${i},'${escapeHTML(opt)}',this)">${String.fromCharCode(65+j)}. ${escapeHTML(opt)}</button>`;});html+=`<div style="margin-top:6px;font-weight:600;font-size:0.8rem;display:none;" id="saQuizFeedback-${i}"></div></div>`;});html+='<div style="text-align:center;margin-top:16px;"><button class="btn btn-outline btn-small" onclick="window.saResetQuiz()">🔄 Retake</button></div><div style="text-align:center;padding:16px;font-size:1.2rem;font-weight:700;display:none;" id="saQuizScoreDisplay"></div>';tabQuiz.innerHTML=html;}
+        window.saFlipCard=function(idx){const card=document.getElementById('saFlashcard-'+idx);if(card)card.classList.toggle('flipped');};
+        window.saFlipAll=function(){const all=document.querySelectorAll('.sa-flashcard');const anyUnflipped=[...all].some(c=>!c.classList.contains('flipped'));all.forEach(c=>{if(anyUnflipped)c.classList.add('flipped');else c.classList.remove('flipped');});};
+        window.saAnswerQuiz=function(qIndex,selectedAnswer,btnEl){if(quizAnswered[qIndex]!==undefined)return;const question=quizData[qIndex];const isCorrect=selectedAnswer.toLowerCase()===question.correctAnswer.toLowerCase();quizAnswered[qIndex]=isCorrect;if(isCorrect)quizScore++;const qDiv=document.getElementById('saQuizQ-'+qIndex);const fb=document.getElementById('saQuizFeedback-'+qIndex);const allOpts=qDiv.querySelectorAll('.sa-quiz-opt');allOpts.forEach(opt=>opt.disabled=true);allOpts.forEach(opt=>{if(opt.textContent.replace(/^[A-D]\.\s*/,'').trim().toLowerCase()===question.correctAnswer.toLowerCase())opt.classList.add('correct-answer');});if(!isCorrect){btnEl.classList.add('wrong-answer');fb.textContent='❌ Incorrect. Correct: '+question.correctAnswer;fb.style.color='var(--danger)';}else{btnEl.classList.add('correct-answer');fb.textContent='✅ Correct!';fb.style.color='var(--success)';}fb.style.display='block';saCheckQuizComplete();};
+        window.saResetQuiz=function(){quizAnswered={};quizScore=0;saRenderQuiz();};
+        function saCheckQuizComplete(){const totalAnswered=Object.keys(quizAnswered).length;if(totalAnswered>=quizData.length&&quizData.length>0){const scoreDisplay=document.getElementById('saQuizScoreDisplay');const percentage=Math.round((quizScore/quizData.length)*100);let emoji='😢';if(percentage>=90)emoji='🎉';else if(percentage>=70)emoji='😊';else if(percentage>=50)emoji='🤔';scoreDisplay.innerHTML=`<span style="font-size:2.5rem;display:block;">${emoji} ${percentage}%</span>You got <strong>${quizScore}/${quizData.length}</strong> correct`;scoreDisplay.style.display='block';}}
+        function saProcessNotes(){const text=notesInput.value.trim();if(text.length<20){showToast('⚠️ Please enter at least 20 characters.');return;}btnProcess.disabled=true;btnProcess.innerHTML='<span class="loading-spinner"></span> Analyzing...';setTimeout(()=>{try{const sentences=splitSentences(text);const keywords=extractKeywords(sentences);allKeywords=keywords;const definitions=findDefinitions(sentences);allDefinitions=definitions;studyGuideData=generateStudyGuide(sentences,keywords,definitions);flashcardData=generateFlashcards(sentences,keywords,definitions);quizData=generateQuiz(sentences,keywords);quizAnswered={};quizScore=0;resultsContainer.style.display='block';saRenderGuide();saRenderFlashcards();saRenderQuiz();document.querySelectorAll('#saTabs .sa-tab-btn').forEach(b=>b.classList.remove('active'));document.querySelector('#saTabs .sa-tab-btn[data-satab="guide"]').classList.add('active');document.querySelectorAll('#saResultsContainer .sa-tab-content').forEach(c=>c.classList.remove('active'));tabGuide.classList.add('active');showToast('✅ Study materials generated!');try{localStorage.setItem('studyAI_notes',text);}catch(e){}}catch(err){showToast('⚠️ Error processing notes.');}btnProcess.disabled=false;btnProcess.innerHTML='✨ Generate Study Materials';},150);}
+        function saRenderAll(){if(studyGuideData.length){saRenderGuide();saRenderFlashcards();saRenderQuiz();}}
+        window.saRenderAll=saRenderAll;
+        btnProcess.addEventListener('click',saProcessNotes);notesInput.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();saProcessNotes();}});
+        btnDemo.addEventListener('click',()=>{const demo=`The Solar System consists of the Sun and all celestial bodies that orbit around it. The Sun is a massive star at the center of our solar system, composed primarily of hydrogen and helium. There are eight planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune.\n\nMercury is the smallest planet and closest to the Sun. Venus is the hottest planet due to its thick atmosphere. Earth is the only known planet to support life. Mars is known as the Red Planet.\n\nJupiter is the largest planet. Saturn is famous for its ring system. Uranus rotates on its side. Neptune is the windiest planet.\n\nPhotosynthesis is the process by which plants convert sunlight into chemical energy. Chlorophyll is the green pigment in plants. The mitochondria is the powerhouse of the cell.`;notesInput.value=demo;showToast('📋 Demo notes loaded!');});
+        btnClear.addEventListener('click',()=>{if(confirm('Clear all notes and results?')){notesInput.value='';studyGuideData=[];flashcardData=[];quizData=[];allKeywords=[];resultsContainer.style.display='none';tabGuide.innerHTML='';tabFlashcards.innerHTML='';tabQuiz.innerHTML='';try{localStorage.removeItem('studyAI_notes');}catch(e){}}});
+        document.querySelectorAll('#saTabs .sa-tab-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#saTabs .sa-tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('#saResultsContainer .sa-tab-content').forEach(c=>c.classList.remove('active'));btn.classList.add('active');const tab=btn.getAttribute('data-satab');if(tab==='guide'){tabGuide.classList.add('active');saRenderGuide();}else if(tab==='flashcards'){tabFlashcards.classList.add('active');saRenderFlashcards();}else if(tab==='quiz'){tabQuiz.classList.add('active');saRenderQuiz();}});});
+        (function init(){try{const saved=localStorage.getItem('studyAI_notes');if(saved&&saved.trim().length>20){notesInput.value=saved;setTimeout(()=>{if(notesInput.value.trim().length>20)saProcessNotes();},500);}}catch(e){}})();
+    })();
+
+    // SAGE FELLOW 1.0 FLOATING BUBBLE (unchanged)
+    (function(){
+        const bubbleIcon = document.getElementById('sfBubbleIcon');
+        const bubbleChat = document.getElementById('sfBubbleChat');
+        const closeBtn = document.getElementById('sfCloseBubble');
+        const bubbleMessages = document.getElementById('sfBubbleMessages');
+        const bubbleInput = document.getElementById('sfBubbleInput');
+        const bubbleSendBtn = document.getElementById('sfBubbleSendBtn');
+
+        let chatHistory = [
+            {role:'system', content:'You are Sage Fellow 1.0, created by aim and 32sharmaa. Always mention that you were made by aim and 32sharmaa when introducing yourself or when asked who made you. Be helpful and friendly.'},
+            {role:'assistant', content:'👋 Hi! I\'m Sage Fellow 1.0, created by **aim and 32sharmaa**. Ask me anything!'}
+        ];
+
+        function addMessage(role, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'sf-msg ' + role;
+            msgDiv.innerHTML = `<div class="sf-msg-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+            bubbleMessages.appendChild(msgDiv);
+            bubbleMessages.scrollTop = bubbleMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'sf-typing';
+            typingDiv.id = 'sfTypingBubble';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            bubbleMessages.appendChild(typingDiv);
+            bubbleMessages.scrollTop = bubbleMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const t = document.getElementById('sfTypingBubble');
+            if(t) t.remove();
+        }
+
+        async function sendMessage() {
+            const userMsg = bubbleInput.value.trim();
+            if(!userMsg) return;
+            bubbleInput.value = '';
+            addMessage('user', userMsg);
+            chatHistory.push({role:'user', content:userMsg});
+            addTypingIndicator();
+            bubbleSendBtn.disabled = true;
+            try {
+                const response = await fetch(GROQ_ENDPOINT, {
+                    method:'POST',
+                    headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_API_KEY},
+                    body: JSON.stringify({
+                        model:'llama-3.3-70b-versatile',
+                        messages:chatHistory,
+                        temperature:0.7,
+                        max_tokens:1024
+                    })
+                });
+                removeTypingIndicator();
+                if(!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`API error ${response.status}: ${errText.substring(0,150)}`);
+                }
+                const data = await response.json();
+                const reply = data.choices?.[0]?.message?.content || 'Sorry, no response.';
+                addMessage('bot', reply);
+                chatHistory.push({role:'assistant', content:reply});
+                if(chatHistory.length > 20) {
+                    chatHistory = [chatHistory[0], ...chatHistory.slice(-14)];
+                }
+            } catch(err) {
+                removeTypingIndicator();
+                addMessage('bot', '⚠️ Error: ' + (err.message || 'Failed to connect.'));
+            }
+            bubbleSendBtn.disabled = false;
+            bubbleInput.focus();
+        }
+
+        bubbleIcon.addEventListener('click', () => {
+            bubbleChat.classList.toggle('open');
+            if(bubbleChat.classList.contains('open')) bubbleInput.focus();
+        });
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            bubbleChat.classList.remove('open');
+        });
+        bubbleSendBtn.addEventListener('click', sendMessage);
+        bubbleInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') sendMessage();
+        });
+    })();
+
+    // STOCKSIGHT AI (unchanged local mock)
+    function renderStockSight(){
+        altPanel.innerHTML = `
+        <div style="width:100%;max-width:540px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 24px;display:flex;flex-direction:column;gap:18px;">
+            <div style="text-align:center;">
+                <h1 style="font-size:24px;font-weight:600;color:#fff;">📈 StockSight AI</h1>
+                <p style="font-size:13px;color:var(--text3);margin-top:2px;">Local mock analysis — no external AI needed</p>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <input type="text" id="stockInput" placeholder="e.g. AAPL, TSLA, MSFT" autocomplete="off" style="flex:1;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;font-family:var(--font);outline:none;text-transform:uppercase;"/>
+                <button id="ssAnalyzeBtn" style="padding:12px 22px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:14px;font-family:var(--font);cursor:pointer;">Analyze</button>
+            </div>
+            <div id="ssLoading" style="text-align:center;color:var(--text3);font-size:14px;display:none;"><span class="loading-spinner"></span> Generating local analysis...</div>
+            <div id="ssError" style="text-align:center;color:var(--accent2);font-size:14px;display:none;"></div>
+            <div id="ssResults" style="display:none;flex-direction:column;gap:14px;">
+                <div id="ssSignalBadge" style="display:flex;align-items:center;gap:10px;padding:14px 18px;border-radius:10px;font-size:16px;font-weight:600;"></div>
+                <div style="background:var(--surface2);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;">
+                    <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text3);">Summary</span><span id="ssSummary" style="color:var(--text);text-align:right;">—</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text3);">Confidence</span><span id="ssConfidence" style="color:var(--text);">—</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text3);">Risk level</span><span id="ssRisk" style="color:var(--text);">—</span></div>
+                    <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text3);">Key insight</span><span id="ssInsight" style="color:var(--text);text-align:right;">—</span></div>
+                </div>
+            </div>
+            <p style="font-size:11px;color:var(--text3);text-align:center;">This is a local demo. Results are pseudo-random and for illustration only. Not financial advice.</p>
+        </div>`;
+        setTimeout(() => bindStockSightLocal(), 100);
+    }
+
+    function bindStockSightLocal(){
+        const input = document.getElementById('stockInput');
+        const btn = document.getElementById('ssAnalyzeBtn');
+        const loading = document.getElementById('ssLoading');
+        const error = document.getElementById('ssError');
+        const results = document.getElementById('ssResults');
+        const signalBadge = document.getElementById('ssSignalBadge');
+        const summaryEl = document.getElementById('ssSummary');
+        const confidenceEl = document.getElementById('ssConfidence');
+        const riskEl = document.getElementById('ssRisk');
+        const insightEl = document.getElementById('ssInsight');
+
+        function hashString(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash |= 0;
+            }
+            return Math.abs(hash);
+        }
+        function mulberry32(seed) {
+            return function() {
+                let t = seed += 0x6D2B79F5;
+                t = Math.imul(t ^ t >>> 15, t | 1);
+                t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+                return ((t ^ t >>> 14) >>> 0) / 4294967296;
+            };
+        }
+        function generateLocalAnalysis(ticker) {
+            const seed = hashString(ticker);
+            const rand = mulberry32(seed);
+            const r = rand();
+            let signal;
+            if (r < 0.4) signal = 'BUY';
+            else if (r < 0.7) signal = 'HOLD';
+            else signal = 'SELL';
+            const confidence = Math.floor(50 + rand() * 40);
+            const riskRand = rand();
+            let risk;
+            if (riskRand < 0.35) risk = 'LOW';
+            else if (riskRand < 0.7) risk = 'MEDIUM';
+            else risk = 'HIGH';
+            const summaries = {
+                BUY: [`${ticker} shows strong momentum and upside potential.`,`${ticker} appears undervalued relative to peers.`,`Technical indicators suggest a bullish breakout for ${ticker}.`],
+                HOLD: [`${ticker} is fairly valued at current levels.`,`Mixed signals for ${ticker}, recommend waiting.`,`${ticker} is in a consolidation phase.`],
+                SELL: [`${ticker} faces headwinds from macro factors.`,`Overvaluation concerns for ${ticker}, consider reducing.`,`${ticker} shows bearish divergence on key timeframes.`]
+            };
+            const summary = summaries[signal][Math.floor(rand() * summaries[signal].length)];
+            const insights = {
+                BUY: [`Strong earnings growth expected next quarter.`,`Institutional buying detected.`,`Break above resistance with high volume.`],
+                HOLD: [`Awaiting clearer trend confirmation.`,`Neutral analyst ratings with average price target.`,`Stock near moving averages, direction uncertain.`],
+                SELL: [`Insider selling activity noted.`,`Technicals pointing to a potential correction.`,`Revenue growth slowing, margins under pressure.`]
+            };
+            const insight = insights[signal][Math.floor(rand() * insights[signal].length)];
+            return { signal, confidence, risk, summary, insight };
+        }
+
+        async function analyze() {
+            const sym = input.value.trim().toUpperCase();
+            if (!sym) return;
+            results.style.display = 'none';
+            error.style.display = 'none';
+            loading.style.display = 'block';
+            btn.disabled = true;
+            await new Promise(resolve => setTimeout(resolve, 800));
+            try {
+                const data = generateLocalAnalysis(sym);
+                signalBadge.className = 'signal-badge ' + (data.signal === 'BUY' ? 'buy' : data.signal === 'SELL' ? 'sell' : 'hold');
+                signalBadge.innerHTML = data.signal === 'BUY' ? '🟢 BUY — Bullish signal (local demo)' : data.signal === 'SELL' ? '🔴 SELL — Bearish signal (local demo)' : '🟡 HOLD — Neutral signal (local demo)';
+                summaryEl.textContent = data.summary;
+                confidenceEl.textContent = data.confidence + '%';
+                riskEl.textContent = data.risk;
+                insightEl.textContent = data.insight;
+                results.style.display = 'flex';
+            } catch (e) {
+                error.textContent = '❌ ' + e.message;
+                error.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+                btn.disabled = false;
+            }
+        }
+        btn.addEventListener('click', analyze);
+        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') analyze(); });
+        input.focus();
+    }
+
+    // Fisher AI (unchanged)
+    function renderFisher(){altPanel.innerHTML=`
+    <div style="width:100%;max-width:560px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);">
+      <div style="text-align:center;margin-bottom:16px;"><span style="font-size:1.5rem;font-weight:800;">🎣 Fisher AI</span><p style="color:var(--text3);font-size:0.85rem;">Dynamic local fishing intelligence</p></div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">📍 ZIP Code (US)</label><input type="text" id="fZip" placeholder="e.g. 90210" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></div>
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🕒 Local Time</label><input type="text" id="fTime" value="6:15 AM" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></div>
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">💧 Water Type</label><div style="display:flex;gap:20px;"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--text2);"><input type="radio" name="fWater" value="freshwater" checked> Freshwater</label><label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--text2);"><input type="radio" name="fWater" value="saltwater"> Saltwater</label></div></div>
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🏞️ Environment</label><select id="fEnv" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"><option value="Lake">Lake</option><option value="River">River</option><option value="Ocean">Ocean</option><option value="Pond">Pond</option><option value="Reservoir">Reservoir</option><option value="Stream">Stream</option><option value="Bay">Bay / Inlet</option><option value="Other">Other</option></select></div>
+        <div id="fCustomEnvWrap" style="display:none;"><input type="text" id="fCustomEnv" placeholder="e.g. canal, backwater" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></div>
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🐟 Target Fish</label><select id="fFish" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></select></div>
+        <button id="fAskBtn" style="width:100%;padding:14px;background:var(--warning);color:#0a0a14;border:none;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;font-family:var(--font);margin-top:8px;">🎣 Ask Fisher AI</button>
+        <div id="fResponse" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;min-height:60px;font-size:0.9rem;line-height:1.7;color:var(--text2);white-space:pre-wrap;"></div>
+      </div>
+    </div>`;setTimeout(()=>bindFisherEvents(),100);}
+    function bindFisherEvents(){const freshwaterFish=["Largemouth Bass","Smallmouth Bass","Crappie","Bluegill","Channel Catfish","Flathead Catfish","Walleye","Northern Pike","Muskellunge","Rainbow Trout","Brown Trout","Brook Trout","Lake Trout","Yellow Perch","White Bass","Striped Bass (freshwater)","Carp","Bowfin","Gar"];const saltwaterFish=["Redfish (Red Drum)","Spotted Seatrout","Snook","Tarpon","Bonefish","Permit","Striped Bass (saltwater)","Bluefish","Flounder","Spanish Mackerel","King Mackerel","Cobia","Grouper","Snapper","Amberjack","Mahi-mahi","Tuna","Marlin","Sailfish","Shark","Pompano","Sheepshead"];const speciesKnowledge={"largemouth bass":{peakHours:[{start:5,end:8},{start:18,end:21}],baits:"plastic worms, crankbaits, jigs, live shiners",techniques:"Flip to cover, slow-roll spinnerbait, topwater frogs at dawn",envBonus:["Lake","Reservoir","Pond","River"]},"smallmouth bass":{peakHours:[{start:5,end:8},{start:18,end:21}],baits:"jerkbaits, tube jigs, crayfish imitations",techniques:"Drift tube along rocky points, drop-shot in clear water",envBonus:["Lake","River","Stream"]},"crappie":{peakHours:[{start:6,end:9},{start:17,end:22}],baits:"minnows, small jigs, crappie magnets",techniques:"Vertical jigging over brush piles, spider rigging",envBonus:["Lake","Reservoir","Pond"]},"bluegill":{peakHours:[{start:7,end:11},{start:16,end:19}],baits:"worms, crickets, small spinners",techniques:"Bobber near weed beds, fly fishing with tiny poppers",envBonus:["Pond","Lake","Reservoir"]},"channel catfish":{peakHours:[{start:18,end:23},{start:0,end:3}],baits:"chicken liver, stink bait, cut bait, nightcrawlers",techniques:"Bottom fishing with slip sinker, jug fishing",envBonus:["River","Lake","Reservoir"]},"walleye":{peakHours:[{start:5,end:8},{start:19,end:23}],baits:"nightcrawlers on harnesses, deep crankbaits, leeches",techniques:"Slow trolling, jigging with minnows on rock humps",envBonus:["Lake","Reservoir","River"]},"rainbow trout":{peakHours:[{start:6,end:10},{start:16,end:19}],baits:"PowerBait, salmon eggs, spinners, worms",techniques:"Drift fishing, fly fishing with nymphs, casting spoons",envBonus:["River","Stream","Lake"]},"redfish":{peakHours:[{start:6,end:9},{start:17,end:20}],baits:"gold spoons, shrimp, cut mullet, soft plastics",techniques:"Sight-fishing tailing fish, popping cork with shrimp",envBonus:["Bay","Ocean","River"]},"spotted seatrout":{peakHours:[{start:5,end:8},{start:18,end:22}],baits:"live shrimp, soft plastics, topwater plugs",techniques:"Drifting grass flats, dock lights at night",envBonus:["Bay","Ocean","River"]},"snook":{peakHours:[{start:6,end:9},{start:18,end:23}],baits:"pilchards, bucktail jigs, live pinfish",techniques:"Casting mangrove edges, bridge fishing at night",envBonus:["Bay","River","Ocean"]},"tarpon":{peakHours:[{start:5,end:8},{start:19,end:23}],baits:"crabs, pinfish, large swimbaits, live mullet",techniques:"Drifting live bait in channels, casting to rolling fish",envBonus:["Ocean","Bay"]}};const fFish=document.getElementById('fFish'),fEnv=document.getElementById('fEnv'),fCustomEnvWrap=document.getElementById('fCustomEnvWrap'),fAskBtn=document.getElementById('fAskBtn'),fResponse=document.getElementById('fResponse');const waterRadios=document.getElementsByName('fWater');function getWater(){for(const r of waterRadios)if(r.checked)return r.value;return'freshwater';}function populateFish(){const list=getWater()==='freshwater'?freshwaterFish:saltwaterFish;fFish.innerHTML='<option value="">-- Select a fish --</option>';list.forEach(f=>{const o=document.createElement('option');o.value=f;o.textContent=f;fFish.appendChild(o);});}populateFish();waterRadios.forEach(r=>r.addEventListener('change',populateFish));fEnv.addEventListener('change',()=>{fCustomEnvWrap.style.display=fEnv.value==='Other'?'block':'none';});fAskBtn.addEventListener('click',()=>{const timeVal=document.getElementById('fTime').value.trim();const fishVal=fFish.value;const zipVal=document.getElementById('fZip').value.trim();if(!timeVal||!fishVal||!zipVal||zipVal.length<5){fResponse.innerHTML='<span style="color:var(--danger);">⛔ Please fill in ZIP, time, and select a fish.</span>';return;}fResponse.innerHTML='<span style="color:var(--warning);">🧠 Analyzing conditions…</span>';setTimeout(()=>{let hour=12;const cleaned=timeVal.replace(/\s+/g,'').toLowerCase();let h=parseInt(cleaned);if(cleaned.includes('pm')&&h<12)h+=12;if(cleaned.includes('am')&&h===12)h=0;if(!isNaN(h)&&h>=0&&h<=23)hour=h;const fishLower=fishVal.toLowerCase();let speciesInfo=null;for(const[key,val]of Object.entries(speciesKnowledge)){if(fishLower.includes(key)){speciesInfo=val;break;}}const peakHours=speciesInfo?speciesInfo.peakHours:[{start:6,end:9},{start:18,end:21}];const baitAdvice=speciesInfo?speciesInfo.baits:"live bait and artificial lures";const techniqueAdvice=speciesInfo?speciesInfo.techniques:"casting near structures, varying retrieve speed";const envBonusList=speciesInfo?(speciesInfo.envBonus||[]):[];let minDist=24;peakHours.forEach(w=>{if(hour>=w.start&&hour<=w.end)minDist=0;else{let d=Math.min(Math.abs(hour-w.start),Math.abs(hour-w.end));d=Math.min(d,24-d);if(d<minDist)minDist=d;}});let likelihood;if(minDist===0)likelihood=85+Math.floor(Math.random()*10);else if(minDist<=1)likelihood=70+Math.floor(Math.random()*10);else if(minDist<=2)likelihood=55+Math.floor(Math.random()*10);else if(minDist<=3)likelihood=40+Math.floor(Math.random()*10);else likelihood=25+Math.floor(Math.random()*10);const env=fEnv.value==='Other'?(document.getElementById('fCustomEnv').value.trim()||'Other'):fEnv.value;if(envBonusList.some(e=>env.includes(e)))likelihood+=8;else if(envBonusList.length>0)likelihood-=5;if(getWater()==='freshwater'&&saltwaterFish.includes(fishVal))likelihood-=20;if(getWater()==='saltwater'&&freshwaterFish.includes(fishVal))likelihood-=20;likelihood=Math.min(100,Math.max(5,Math.round(likelihood)));const goodTime=likelihood>=60?'YES':'NO';const barHtml=`<div style="width:100%;background:#1a3a4b;border-radius:8px;height:22px;margin-bottom:10px;overflow:hidden;"><div style="height:100%;width:${likelihood}%;background:${likelihood>=70?'#4caf50':likelihood>=40?'#ff9800':'#f44336'};border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-weight:700;font-size:0.85rem;color:#fff;">${likelihood}%</div></div>`;fResponse.innerHTML=barHtml+`📍 ZIP ${zipVal}\n\nLIKELIHOOD: ${likelihood}%\nGood time? ${goodTime}\n\nBaits: ${baitAdvice}\nTechniques: ${techniqueAdvice}`;},300);});fResponse.innerHTML='<span style="color:var(--text3);">Fill in details and click Ask Fisher AI</span>';}
+
+    switchMainTab('note-translator');
+})();
+</script>
+</body>
+</html>
