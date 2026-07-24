@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* ─── All CSS (unchanged from before) ─── */
         :root {
             --bg: #0c0c11;
             --surface: #18181f;
@@ -110,7 +111,7 @@
         .loading-spinner { display:inline-block; width:18px; height:18px; border:2.5px solid transparent; border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; }
         @keyframes spin { to { transform:rotate(360deg); } }
 
-        /* NOTE TRANSLATOR STYLES */
+        /* Note Translator */
         .nt-container { width:100%; max-width:750px; margin:0 auto; background:var(--surface); border-radius:var(--radius); padding:24px 20px; box-shadow:var(--shadow); border:1px solid var(--border); position:relative; }
         .nt-container::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, var(--primary), var(--accent), var(--primary)); border-radius:var(--radius) var(--radius) 0 0; }
         .nt-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
@@ -133,7 +134,7 @@
         .nt-tracing-card { background:#1e1e2a; border-radius:16px; padding:24px 16px; max-width:380px; width:95%; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.6); }
         .nt-canvas-trace { background:#fff; border-radius:12px; margin:0 auto 14px; width:100%; max-width:260px; aspect-ratio:1/1; display:block; touch-action:none; }
 
-        /* STUDY AI STYLES */
+        /* Study AI */
         .sa-container { width:100%; max-width:900px; margin:0 auto; }
         .sa-header { text-align:center; padding:16px 0; }
         .sa-logo-text { font-size:1.5rem; font-weight:700; letter-spacing:-0.3px; background:linear-gradient(135deg, #e1e1e6, #9bb5e8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -169,126 +170,27 @@
         .sa-empty { text-align:center; padding:40px 20px; color:var(--text3); }
         .sa-empty .big-icon { font-size:3rem; display:block; margin-bottom:12px; opacity:0.5; }
 
-        /* SAGE FELLOW FLOATING BUBBLE (TOP RIGHT) */
-        .sf-floating-bubble {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-        .sf-bubble-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: var(--primary);
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-            transition: all var(--transition);
-            user-select: none;
-        }
-        .sf-bubble-icon:hover {
-            background: var(--surface2);
-            box-shadow: 0 4px 18px rgba(0,0,0,0.5);
-            transform: translateY(-1px);
-        }
-        .sf-bubble-chat {
-            display: none;
-            width: 340px;
-            max-height: 480px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            margin-top: 8px;
-            overflow: hidden;
-            flex-direction: column;
-            animation: fadeSlide 0.2s ease;
-        }
-        .sf-bubble-chat.open {
-            display: flex;
-        }
-        .sf-bubble-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 14px;
-            background: var(--surface2);
-            border-bottom: 1px solid var(--border);
-        }
-        .sf-bubble-header .close-btn {
-            background: transparent;
-            border: none;
-            color: var(--text3);
-            font-size: 1.1rem;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .sf-bubble-header .close-btn:hover { color: #fff; }
-        .sf-bubble-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 0.85rem;
-            max-height: 300px;
-        }
-        .sf-bubble-messages .sf-msg { max-width: 92%; }
-        .sf-bubble-messages .sf-msg-bubble {
-            padding: 8px 12px;
-            border-radius: 8px;
-            line-height: 1.4;
-        }
-        .sf-bubble-messages .user .sf-msg-bubble { background: var(--primary); color: #fff; }
-        .sf-bubble-messages .bot .sf-msg-bubble { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
-        .sf-bubble-input {
-            display: flex;
-            gap: 6px;
-            padding: 10px 14px;
-            border-top: 1px solid var(--border);
-        }
-        .sf-bubble-input input {
-            flex: 1;
-            padding: 10px 12px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text);
-            font-family: var(--font);
-            font-size: 0.8rem;
-            outline: none;
-        }
-        .sf-bubble-input input:focus { border-color: var(--primary); }
-        .sf-bubble-input button {
-            padding: 8px 16px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: var(--font);
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-        .sf-bubble-credit {
-            font-size: 0.65rem;
-            color: var(--text3);
-            text-align: center;
-            padding: 4px 0 8px;
-        }
+        /* Sage Fellow Bubble */
+        .sf-floating-bubble { position:fixed; top:20px; right:20px; z-index:2000; display:flex; flex-direction:column; align-items:flex-end; }
+        .sf-bubble-icon { width:48px; height:48px; border-radius:50%; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--primary); cursor:pointer; box-shadow:0 2px 12px rgba(0,0,0,0.3); transition:all var(--transition); user-select:none; }
+        .sf-bubble-icon:hover { background:var(--surface2); box-shadow:0 4px 18px rgba(0,0,0,0.5); transform:translateY(-1px); }
+        .sf-bubble-chat { display:none; width:340px; max-height:480px; background:var(--surface); border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.5); margin-top:8px; overflow:hidden; flex-direction:column; animation:fadeSlide 0.2s ease; }
+        .sf-bubble-chat.open { display:flex; }
+        .sf-bubble-header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--surface2); border-bottom:1px solid var(--border); }
+        .sf-bubble-header .close-btn { background:transparent; border:none; color:var(--text3); font-size:1.1rem; cursor:pointer; padding:4px; }
+        .sf-bubble-header .close-btn:hover { color:#fff; }
+        .sf-bubble-messages { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:8px; font-size:0.85rem; max-height:300px; }
+        .sf-bubble-messages .sf-msg { max-width:92%; }
+        .sf-bubble-messages .sf-msg-bubble { padding:8px 12px; border-radius:8px; line-height:1.4; }
+        .sf-bubble-messages .user .sf-msg-bubble { background:var(--primary); color:#fff; }
+        .sf-bubble-messages .bot .sf-msg-bubble { background:var(--surface2); border:1px solid var(--border); color:var(--text); }
+        .sf-bubble-input { display:flex; gap:6px; padding:10px 14px; border-top:1px solid var(--border); }
+        .sf-bubble-input input { flex:1; padding:10px 12px; background:var(--surface); border:1px solid var(--border); border-radius:6px; color:var(--text); font-family:var(--font); font-size:0.8rem; outline:none; }
+        .sf-bubble-input input:focus { border-color:var(--primary); }
+        .sf-bubble-input button { padding:8px 16px; background:var(--primary); color:#fff; border:none; border-radius:6px; font-weight:700; cursor:pointer; font-family:var(--font); font-size:0.8rem; white-space:nowrap; }
+        .sf-bubble-credit { font-size:0.65rem; color:var(--text3); text-align:center; padding:4px 0 8px; }
 
-        /* RESPONSIVE */
+        /* Responsive */
         @media (max-width: 900px) {
             .sidebar { position:fixed; left:0; top:0; height:100%; transform:translateX(-100%); width:250px; z-index:20; }
             .sidebar.open { transform:translateX(0); }
@@ -297,8 +199,8 @@
             .main-content { padding:16px 12px; padding-top:50px; }
             .sa-flashcard-grid { grid-template-columns:1fr; }
             .sa-tab-btn { font-size:0.75rem; padding:10px 12px; min-width:60px; }
-            .sf-floating-bubble { top: 10px; right: 10px; }
-            .sf-bubble-chat { width: 300px; }
+            .sf-floating-bubble { top:10px; right:10px; }
+            .sf-bubble-chat { width:300px; }
             .nt-container { padding:16px 12px; }
         }
     </style>
@@ -395,7 +297,7 @@
     </main>
 </div>
 
-<!-- Floating Sage Fellow 1.0 bubble (top‑right, 🌐) -->
+<!-- Floating Sage Fellow 1.0 bubble -->
 <div class="sf-floating-bubble" id="sfFloatingBubble">
     <div class="sf-bubble-icon" id="sfBubbleIcon">🌐</div>
     <div class="sf-bubble-chat" id="sfBubbleChat">
@@ -417,8 +319,11 @@
 <div class="toast" id="globalToast"></div>
 
 <script>
+// ──────────────────────────────────────────────
+//  ALL-IN-ONE SCRIPT – No external files needed
+// ──────────────────────────────────────────────
 (function() {
-    // New Cloudflare Worker API endpoint (no key needed)
+    // Cloudflare Worker endpoint (safe for GitHub Pages)
     const API_ENDPOINT = 'https://grok-api.aifire6218700.workers.dev';
 
     const mainContent = document.getElementById('mainContent');
@@ -476,7 +381,7 @@
     sidebarOverlay.addEventListener('click', ()=>{ sidebar.classList.remove('open'); sidebarOverlay.classList.remove('show'); });
     window.showGlobalToast = showToast;
 
-    // Note Translator (unchanged)
+    // ─── Note Translator ─────────────────────
     (function(){
         const btnListen = document.getElementById('ntBtnListen'), btnIcon = document.getElementById('ntBtnIcon'), btnLabel = document.getElementById('ntBtnLabel');
         const statusDot = document.getElementById('ntStatusDot'), statusText = document.getElementById('ntStatusText');
@@ -528,7 +433,7 @@
         setStatus('idle');recognition=setupRecognition();
     })();
 
-    // Study AI (unchanged)
+    // ─── Study AI ────────────────────────────
     (function(){
         const notesInput=document.getElementById('saNotesInput'),btnProcess=document.getElementById('saBtnProcess'),btnDemo=document.getElementById('saBtnDemo'),btnClear=document.getElementById('saBtnClear');
         const resultsContainer=document.getElementById('saResultsContainer'),tabGuide=document.getElementById('saTabGuide'),tabFlashcards=document.getElementById('saTabFlashcards'),tabQuiz=document.getElementById('saTabQuiz');
@@ -561,7 +466,7 @@
         (function init(){try{const saved=localStorage.getItem('studyAI_notes');if(saved&&saved.trim().length>20){notesInput.value=saved;setTimeout(()=>{if(notesInput.value.trim().length>20)saProcessNotes();},500);}}catch(e){}})();
     })();
 
-    // ─── SAGE FELLOW 1.0 FLOATING BUBBLE (using Cloudflare Worker) ───
+    // ─── Sage Fellow 1.0 (Cloudflare) ─────────
     (function(){
         const bubbleIcon = document.getElementById('sfBubbleIcon');
         const bubbleChat = document.getElementById('sfBubbleChat');
@@ -635,18 +540,12 @@
         });
     })();
 
-    // STOCKSIGHT AI (unchanged local mock)
+    // ─── StockSight AI (local mock) ──────────
     function renderStockSight(){
         altPanel.innerHTML = `
         <div style="width:100%;max-width:540px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 24px;display:flex;flex-direction:column;gap:18px;">
-            <div style="text-align:center;">
-                <h1 style="font-size:24px;font-weight:600;color:#fff;">📈 StockSight AI</h1>
-                <p style="font-size:13px;color:var(--text3);margin-top:2px;">Local mock analysis — no external AI needed</p>
-            </div>
-            <div style="display:flex;gap:10px;">
-                <input type="text" id="stockInput" placeholder="e.g. AAPL, TSLA, MSFT" autocomplete="off" style="flex:1;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;font-family:var(--font);outline:none;text-transform:uppercase;"/>
-                <button id="ssAnalyzeBtn" style="padding:12px 22px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:14px;font-family:var(--font);cursor:pointer;">Analyze</button>
-            </div>
+            <div style="text-align:center;"><h1 style="font-size:24px;font-weight:600;color:#fff;">📈 StockSight AI</h1><p style="font-size:13px;color:var(--text3);margin-top:2px;">Local mock analysis — no external AI needed</p></div>
+            <div style="display:flex;gap:10px;"><input type="text" id="stockInput" placeholder="e.g. AAPL, TSLA, MSFT" autocomplete="off" style="flex:1;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;font-family:var(--font);outline:none;text-transform:uppercase;"/><button id="ssAnalyzeBtn" style="padding:12px 22px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-weight:600;font-size:14px;font-family:var(--font);cursor:pointer;">Analyze</button></div>
             <div id="ssLoading" style="text-align:center;color:var(--text3);font-size:14px;display:none;"><span class="loading-spinner"></span> Generating local analysis...</div>
             <div id="ssError" style="text-align:center;color:var(--accent2);font-size:14px;display:none;"></div>
             <div id="ssResults" style="display:none;flex-direction:column;gap:14px;">
@@ -751,7 +650,7 @@
         input.focus();
     }
 
-    // Fisher AI (unchanged)
+    // ─── Fisher AI (unchanged) ────────────────
     function renderFisher(){altPanel.innerHTML=`
     <div style="width:100%;max-width:560px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;box-shadow:var(--shadow);">
       <div style="text-align:center;margin-bottom:16px;"><span style="font-size:1.5rem;font-weight:800;">🎣 Fisher AI</span><p style="color:var(--text3);font-size:0.85rem;">Dynamic local fishing intelligence</p></div>
@@ -759,23 +658,14 @@
         <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">📍 ZIP Code (US)</label><input type="text" id="fZip" placeholder="e.g. 90210" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></div>
         <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🕒 Local Time</label><input type="text" id="fTime" value="6:15 AM" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></div>
         <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">💧 Water Type</label><div style="display:flex;gap:20px;"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--text2);"><input type="radio" name="fWater" value="freshwater" checked> Freshwater</label><label style="display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--text2);"><input type="radio" name="fWater" value="saltwater"> Saltwater</label></div></div>
-        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🏞️ Environment</label><select id="fEnv" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"><option value="Lake">Lake</ value="Lake">Lake</option><option value="Riveroption><option value="River">River</option><option">River</option><option value="Ocean">Ocean</option>< value="Ocean">Ocean</option><option value="Poption value="Pond">Pond</optionond">Pond</option><option value="Reserv><option value="Reservoir">Reservoir</oir">Reservoir</option><option value="Streamoption><option value="Stream">Stream</option><option value="Bay">Bay">Stream</option><option value="Bay">Bay / / Inlet</option><option Inlet</option><option value="Other">Other</ value="Other">Other</option></select></div>
-option></select></div>
-        <div id="f        <div id="fCustomEnvCustomEnvWrap" style="displayWrap" style="display:none;"><input type:none;"><input type="text" id="f="text" id="fCustomEnv" placeholder="eCustomEnv" placeholder="e.g. canal, back.g. canal, backwater" style="width:water" style="width:100%;padding:100%;padding:10px 10px 14px;background14px;background:var(--surface2);:var(--surface2);border:1pxborder:1px solid var(--border);border-radius: solid var(--border);border-radius:var(--radius-sm);colorvar(--radius-sm);color:var(--text:var(--text);font-family:var);font(--font);-family:var(--font);"></div>
-        <div"></div>
-        <div><label style="display><label style="display:block;font-weight::block;font-weight:600;margin-bottom:4600;margin-bottom:4px;px;color:var(--text2);">color:var(--text2);">🐟🐟 Target Fish</label><select Target Fish</label><select id="fFish" style id="fFish" style="width:100%;padding="width:100%;padding:10px 14px:10px 14px;background:var(--surface;background:var(--surface2);border:1px solid var(--border);border2);border:1px solid var(--border);border-radius:var(--radius-sm-radius:var(--radius-sm);color:var(--text);color:var(--text);font-family:var(--);font-family:var(--font);"></select></divfont);"></select></div>
-        <button id="fAskBtn" style>
-        <button id="fAskBtn" style="="width:100%;padding:width:100%;padding:14px;background:var14px;background:var(--warning);color:#0(--warning);color:#0a0a14;bordera0a14;border:none;border-radius::none;border-radius:50px;font-weight:50px;font-weight:700;font-size:1700;font-size:1rem;cursor:pointer;rem;cursor:pointer;font-family:var(--fontfont-family:var(--font);margin-top:8);margin-top:8px;">🎣px;">🎣 Ask Fisher AI Ask Fisher AI</button>
-        <div id</button>
-="fResponse        <div id="f" style="background:var(--surface2);borderResponse" style="background:var(--surface2);border:1px solid var(--:1px solid var(--border);border-radius:varborder);border-radius:var(--radius-sm);(--radius-sm);padding:16px;padding:16px;min-height:60px;font-size:min-height:60px;font-size:0.9rem;line0.9rem;line-height:1.7;-height:1.7;color:var(--text2color:var(--text2);white-space:pre-wrap;"></);white-space:pre-wrap;"></div>
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🏞️ Environment</label><select id="fEnv" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"><option value="Lake">Lake</option><option value="River">River</option><option value="Ocean">Ocean</option><option value="Pond">Pond</option><option value="Reservoir">Reservoir</option><option value="Stream">Stream</option><option value="Bay">Bay / Inlet</option><option value="Other">Other</option></select></div>
+        <div id="fCustomEnvWrap" style="display:none;"><input type="text" id="fCustomEnv" placeholder="e.g. canal, backwater" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></div>
+        <div><label style="display:block;font-weight:600;margin-bottom:4px;color:var(--text2);">🐟 Target Fish</label><select id="fFish" style="width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font);"></select></div>
+        <button id="fAskBtn" style="width:100%;padding:14px;background:var(--warning);color:#0a0a14;border:none;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;font-family:var(--font);margin-top:8px;">🎣 Ask Fisher AI</button>
+        <div id="fResponse" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;min-height:60px;font-size:0.9rem;line-height:1.7;color:var(--text2);white-space:pre-wrap;"></div>
       </div>
-div>
-      </div>
-    </div>`    </div>`;set;setTimeout(()=>bindFisherEvents(),100);}
-Timeout(()=>bindFisherEvents(),100);}
-    function bindFisherEvents(){    function bindFisherEvents(){const freshwaterFish=["Lconst freshwaterFish=["Largemouth Bass","Smallargemouth Bass","Smallmouth Bass","Cramouth Bass","Crappie","Bluegill","Channelppie","Bluegill","Channel Catfish","Flathead Catfish","Wal Catfish","Flathead Catfish","Walleye","Northernleye","Northern Pike","M Pike","Muskellunge","Rainuskellunge","Rainbow Trout","Brown Trout","bow Trout","Brown Trout","Brook Trout","Lake TrBrook Trout","Lake Trout","Yellow Perch","out","Yellow Perch","White Bass","StripedWhite Bass","Striped Bass (freshwater)"," Bass (freshwater)","Carp","Bowfin","GarCarp","Bowfin","Gar"]"];const saltwaterFish=[";const saltwaterFish=["Redfish (RedRedfish (Red Drum)","Spotted Drum)","Spotted Seatrout","Sn Seatrout","Snook","Tarook","Tarpon","Bonepon","Bonefish","Permfish","Permit","Striped Bassit","Striped Bass (saltwater)","Blue (saltwater)","Bluefish","Flfish","Flounder","Spanish Mackounder","Spanish Mackerel","King Mackerel","Cobiaerel","King Mackerel","Cobia","Grouper","Snapper","","Grouper","Snapper","Amberjack","MahiAmberjack","Mahi-mahi","Tuna","-mahi","Tuna","Marlin","SailMarlin","Sailfish","Sharkfish","Shark","Pompano","Sheepshead","Pompano","Sheeps"];const specieshead"];const speciesKnowledge={"largKnowledge={"largemouth bass":emouth bass":{peakHours:[{start{peakHours:[{start:5,end:8},{start:18,end::5,end:8},{start:18,end:2121}],baits}],baits:"plastic worms:"plastic worms, crankbaits, j, crankbaits, jigs, live shigs, live shiners",techniques:"Flip to cover, slowiners",techniques:"Flip to cover-roll spinnerb, slow-roll spinnerbait, topwaterait, topwater frogs at dawn",envBonus frogs at dawn",envBonus:["Lake",":["Lake","Reservoir","PondReservoir","Pond","River"]}","River"]},"smallmouth,"smallmouth bass":{peakHours bass":{peakHours:[{start:5,end::[{start:5,end:8},{start:8},{start:18,end18,end:21}],baits:"jerkba:21}],baits:"jerkbaits, tube jits, tube jigs, crayfishigs, crayfish imitations",techniques:"Drift tube along imitations",techniques:"Drift tube along rocky points, drop rocky points, drop-shot in clear-shot in clear water",envBonus:[" water",envBonus:["Lake","River","StreamLake","River","Stream"]},"crapp"]},"crappie":{peakHoursie":{peakHours:[{start:6,end:9},{start::[{start:6,end:9},{start:17,end:22}],17,end:22}],baitsbaits:"minnows:"minnows,, small jigs, cra small jigs, crappie magnets",techniquesppie magnets",techniques:"Vertical j:"Vertical jigging over brush piles, spiderigging over brush piles, spider rigging",envBonus: rigging",envBonus:["Lake","Res["Lake","Reservoir","Pond"]ervoir","Pond"]},"bluegill},"bluegill":{peakHours:[{":{peakHours:[{start:7,end:11},{start:16start:7,end:11},{start:16,end:19}],ba,end:19}],baits:"worms, crickits:"worms, crickets, small spets, small spinners",techniques:"Bobinners",techniques:"Bobber near weedber near weed beds, fly fishing with tiny poppers",env beds, fly fishing with tiny poppers",envBonus:["PBonus:["Pond","Lake","Resond","Lake","Reservervoir"]},"channel catfish":{peakHoursoir"]},"channel catfish":{peak:[{start:18,end:23},{Hours:[{start:18,end:23},{start:0start:0,end:3}],ba,end:3}],baits:"chicken liver, stits:"chicken liver, stink bait, cut baitink bait, cut bait, nightcrawlers",, nightcrawlers",techniques:"Bottomtechniques:"Bottom fishing with slip fishing with slip sinker, jug sinker, jug fishing",envBonus:[" fishing",envBonus:["River","LakeRiver","Lake","Reservoir"]},"wal","Reservoir"]},"walleye":{peakHoursleye":{peakHours:[{start::[{start:55,end:8},{start:19,end:23}],,end:8},{start:19,end:23}],baits:"nightbaits:"nightccrawlers on harnessrawlers on harnesses, deep crankbaits, leeches",es, deep crankbaits, leeches",techniques:"Slow ttechniques:"Slow trolling, jigging withrolling, jigging with minnows on rock minnows on rock humps",envBonus:["Lake","Reservoir humps",envBonus:["Lake","Reservoir","River"]},"rain","River"]},"rainbow trout":{peakHoursbow trout":{peakHours:[{start:6,end:[{start:6,end:10},{start:16:10},{start:16,end:19}],ba,end:19}],baits:"PowerBait, salmon eggsits:"PowerBait, salmon eggs, spinners, worms",techniques:"Dr, spinners, worms",techniques:"Drift fishing, flyift fishing, fly fishing with nymphs, casting fishing with nymphs, casting spoons",envBonus:["River","Stream","Lake spoons",envBonus:["River","Stream","Lake"]},"redfish":"]},"redfish":{peak{peakHours:[{startHours:[{start:6,end:9:6,end:9},{start:17,end:},{start:17,end:20}],baits:"20}],baits:"gold spoons, shrimpgold spoons, shrimp, cut mul, cut mullet, soft plastics",techniques:"Slet, soft plastics",techniques:"Sight-fishing tailight-fishing tailing fish, poppinging fish, popping cork with shrimp",envBonus:["Bay cork with shrimp",envBonus:["Bay","Ocean","River","Ocean","River"]},"spotted"]},"spotted seatrout":{peak seatrout":{peakHours:[{start:5,end:8},{start:Hours:[{start:5,end:8},{start:18,end18,end:22}],:22}],baits:"livebaits:"live shrimp, soft shrimp, soft plastics, topwater plugs",techniques:"Dr plastics, topwater plugs",techniques:"Drifting grass flats, dockifting grass flats, dock lights at night lights at night",envBonus:["Bay","Ocean","",envBonus:["Bay","Ocean","River"]},"snookRiver"]},"snook":{peakHours:[{":{peakHours:[{start:6,end:9},{start:18,end:start:6,end:9},{start:18,end:23}],baits:"23}],baits:"pilchards, buckpilchards, bucktail jigs, live pinfish",techniques:"tail jigs, live pinfish",techniques:"Casting mangrove edgesCasting mangrove edges, bridge fishing, bridge fishing at night",envBonus: at night",envBonus:["Bay","River","Ocean["Bay","River","Ocean"]}"]},"tarpon,"tarpon":{peakHours:[":{peakHours:[{{start:5,end:8start:5,end:8},{start:19,end:},{start:19,end:23}],23}],baits:"baits:"crabs, pincrabs, pinfish, large swimfish, large swimbaits, live mulbaits, live mullet",techniques:"Drlet",techniques:"Drifting liveifting live bait bait in channels, casting in channels, casting to rolling fish",envBonus to rolling fish",envBonus:[":["Ocean","BayOcean","Bay"]}};const f"]}};const fFish=document.getElementById('fFish=document.getElementById('fFish'),fEnv=document.getElementById('Fish'),fEnvfEnv=document.getElementById('fEnv'),fCustomEnv'),fCustomEnvWrap=document.getElementById('fWrap=document.getElementById('fCustomEnvWrap'),fAskCustomEnvWrap'),fAskBtn=document.getElementById('fBtn=document.getElementById('fAskBtn'),fResponse=AskBtn'),fResponse=document.getElementById('fResponse');const waterRadios=document.getElementsdocument.getElementById('fResponse');const waterRadios=document.getElementsByName('fWater');functionByName('fWater');function getWater(){for(const r of waterRadios) getWater(){for(const r of waterRadios)if(r.checked)return r.value;return'if(r.checked)return r.value;return'freshwaterfreshwater';}function populate';}function populateFish(){const list=getWater()==='freshwater'?freshwaterFish:saltwaterFishFish(){const list=getWater()==='freshwater'?freshwaterFish;fFish.innerHTML='<option value:saltwaterFish;fFish.innerHTML='<option value="">-- Select="">-- Select a fish --</option>';list.forEach(f=>{const o a fish --</option>';list.forEach(f=>{const o=document.createElement('option');o.value=f;o.text=document.createElement('option');o.value=f;o.textContent=f;fContent=f;fFish.appendChild(o);Fish.appendChild(o);});}});}populateFish();waterRadios.forEach(r=>r.addEventListenerpopulateFish();waterRad('change',populateFishios.forEach(r=>r.addEventListener('change',populateFish));fEnv));fEnv.addEventListener('change',()=>{fCustomEnvWrap.style.display=fEnv.addEventListener('change',()=>{fCustomEnvWrap.style.display=fEnv.value==='Other.value==='Other'?'block':'none';});fAskBtn.addEventListener('click',()=>'?'block':'none';});fAskBtn.addEventListener('click',()=>{const timeVal{const timeVal=document.getElementById('fTime=document.getElementById('fTime').value.trim();const fishVal=fFish.value;const zipVal=document').value.trim();const fishVal=fFish.value;const zipVal=document.getElementById('fZip.getElementById('fZip').value').value.trim();if(!timeVal.trim();if(!timeVal||!fishVal||!zipVal||zipVal.length<5){f||!fishVal||!zipVal||zipVal.length<5){fResponse.innerHTML='<span style="color:var(--danger);Response.innerHTML='<span style="color:var(--danger);">⛔ Please fill in ZIP, time, and select a fish.</span>">⛔ Please fill in ZIP, time, and select a fish.</span>';return;}fResponse';return;}fResponse.innerHTML='.innerHTML='<span style="color:var(--warning);">🧠 Analyzing conditions…</span>';set<span style="color:var(--warning);">🧠 Analyzing conditions…</span>';setTimeout(()=>{letTimeout(()=>{let hour=12;const cleaned=timeVal.replace(/\s+/g,''). hour=12;const cleaned=timeVal.replace(/\s+/g,'').toLowerCase();lettoLowerCase();let h=parseInt(cleaned);if( h=parseInt(cleaned);if(cleaned.includes('pm')cleaned.includes('pm')&&h<12)h+=12;if&&h<12)h+=12;if(cleaned.includes('am')&&(cleaned.includes('am')&&h===12)h=0;if(!isNaN(h)&&h>=0h===12)h=0;if(!isNaN(h)&&h>=0&&h<=23)hour=h;const fishLower=fishVal.toLowerCase();let speciesInfo=null;for(const[key,val]of Object.entries(speciesKnowledge)){if(fishLower.includes(key)){speciesInfo=val;break;}}const peakHours=speciesInfo?speciesInfo.peakHours:[{start:6,end:9},{start:18,end:21}];const baitAdvice=speciesInfo?speciesInfo.baits:"live bait and artificial lures";const techniqueAdvice=speciesInfo?speciesInfo.techniques:"casting near structures, varying retrieve speed";const envBonusList=speciesInfo?(speciesInfo.envBonus||[]):[];let minDist=24;peakHours.forEach(w=>{if(hour>=w.start&&hour<=w.end)minDist=0;else{let d=Math.min(Math.abs(hour-w.start),Math.abs(hour-w.end));d=Math.min(d,24-d);if(d<minDist)minDist=d;}});let likelihood;if(minDist===0)likelihood=85+Math.floor(Math.random()*10);else if(minDist<=1)likelihood=70+Math.floor(Math.random()*10);else if(minDist<=2)likelihood=55+Math.floor(Math.random()*10);else if(minDist<=3)likelihood=40+Math.floor(Math.random()*10);else likelihood=25+Math.floor(Math.random()*10);const env=fEnv.value==='Other'?(document.getElementById('fCustomEnv').value.trim()||'Other'):fEnv.value;if(envBonusList.some(e=>env.includes(e)))likelihood+=8;else if(envBonusList.length>0)likelihood-=5;if(getWater()==='freshwater'&&saltwaterFish.includes(fishVal))likelihood-=20;if(getWater()==='saltwater'&&freshwaterFish.includes(fishVal))likelihood-=20;likelihood=Math.min(100,Math.max(5,Math.round(likelihood)));const goodTime=likelihood>=60?'YES':'NO';const barHtml=`<div style="width:100%;background:#1a3a4b;border-radius:8px;height:22px;margin-bottom:10px;overflow:hidden;"><div style="height:100%;width:${likelihood}%;background:${likelihood>=70?'#4caf50':likelihood>=40?'#ff9800':'#f44336'};border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-weight:700;font-size:0.85rem;color:#fff;">${likelihood}%&&h<=23)hour=h;const fishLower=fishVal.toLowerCase();let speciesInfo=null;for(const[key,val]of Object.entries(speciesKnowledge)){if(fishLower.includes(key)){speciesInfo=val;break;}}const peakHours=speciesInfo?speciesInfo.peakHours:[{start:6,end:9},{start:18,end:21}];const baitAdvice=speciesInfo?speciesInfo.baits:"live bait and artificial lures";const techniqueAdvice=speciesInfo?speciesInfo.techniques:"casting near structures, varying retrieve speed";const envBonusList=speciesInfo?(speciesInfo.envBonus||[]):[];let minDist=24;peakHours.forEach(w=>{if(hour>=w.start&&hour<=w.end)minDist=0;else{let d=Math.min(Math.abs(hour-w.start),Math.abs(hour-w.end));d=Math.min(d,24-d);if(d<minDist)minDist=d;}});let likelihood;if(minDist===0)likelihood=85+Math.floor(Math.random()*10);else if(minDist<=1)likelihood=70+Math.floor(Math.random()*10);else if(minDist<=2)likelihood=55+Math.floor(Math.random()*10);else if(minDist<=3)likelihood=40+Math.floor(Math.random()*10);else likelihood=25+Math.floor(Math.random()*10);const env=fEnv.value==='Other'?(document.getElementById('fCustomEnv').value.trim()||'Other'):fEnv.value;if(envBonusList.some(e=>env.includes(e)))likelihood+=8;else if(envBonusList.length>0)likelihood-=5;if(getWater()==='freshwater'&&saltwaterFish.includes(fishVal))likelihood-=20;if(getWater()==='saltwater'&&freshwaterFish.includes(fishVal))likelihood-=20;likelihood=Math.min(100,Math.max(5,Math.round(likelihood)));const goodTime=likelihood>=60?'YES':'NO';const barHtml=`<div style="width:100%;background:#1a3a4b;border-radius:8px;height:22px;margin-bottom:10px;overflow:hidden;"><div style="height:100%;width:${likelihood}%;background:${likelihood>=70?'#4caf50':likelihood>=40?'#ff9800':'#f44336'};border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-weight:700;font-size:0.85rem;color:#fff;">${likelihood}%</div></div>`;fResponse.innerHTML=barHtml+`📍 ZIP ${zipVal}\n\nLIKELIHOOD: ${likelihood}</div></div>`;fResponse.innerHTML=barHtml+`📍 ZIP ${zipVal}\n\nLIKELIHOOD: ${likelihood}%\nGood time? ${goodTime}\n\nBaits: ${baitAdvice}\nTechniques: ${techniqueAdvice}`;},%\nGood time? ${goodTime}\n\nBaits: ${baitAdvice}\nTechniques: ${techniqueAdvice}`;},300);});300);});fResponse.innerHTML='<span style="color:fResponse.innerHTML='<span style="color:var(--text3);">Fill in details and click Ask Fishervar(--text3);">Fill in details and click Ask Fisher AI</span>';}
-
- AI</span>';}
+    </div>`;setTimeout(()=>bindFisherEvents(),100);}
+    function bindFisherEvents(){const freshwaterFish=["Largemouth Bass","Smallmouth Bass","Crappie","Bluegill","Channel Catfish","Flathead Catfish","Walleye","Northern Pike","Muskellunge","Rainbow Trout","Brown Trout","Brook Trout","Lake Trout","Yellow Perch","White Bass","Striped Bass (freshwater)","Carp","Bowfin","Gar"];const saltwaterFish=["Redfish (Red Drum)","Spotted Seatrout","Snook","Tarpon","Bonefish","Permit","Striped Bass (saltwater)","Bluefish","Flounder","Spanish Mackerel","King Mackerel","Cobia","Grouper","Snapper","Amberjack","Mahi-mahi","Tuna","Marlin","Sailfish","Shark","Pompano","Sheepshead"];const speciesKnowledge={"largemouth bass":{peakHours:[{start:5,end:8},{start:18,end:21}],baits:"plastic worms, crankbaits, jigs, live shiners",techniques:"Flip to cover, slow-roll spinnerbait, topwater frogs at dawn",envBonus:["Lake","Reservoir","Pond","River"]},"smallmouth bass":{peakHours:[{start:5,end:8},{start:18,end:21}],baits:"jerkbaits, tube jigs, crayfish imitations",techniques:"Drift tube along rocky points, drop-shot in clear water",envBonus:["Lake","River","Stream"]},"crappie":{peakHours:[{start:6,end:9},{start:17,end:22}],baits:"minnows, small jigs, crappie magnets",techniques:"Vertical jigging over brush piles, spider rigging",envBonus:["Lake","Reservoir","Pond"]},"bluegill":{peakHours:[{start:7,end:11},{start:16,end:19}],baits:"worms, crickets, small spinners",techniques:"Bobber near weed beds, fly fishing with tiny poppers",envBonus:["Pond","Lake","Reservoir"]},"channel catfish":{peakHours:[{start:18,end:23},{start:0,end:3}],baits:"chicken liver, stink bait, cut bait, nightcrawlers",techniques:"Bottom fishing with slip sinker, jug fishing",envBonus:["River","Lake","Reservoir"]},"walleye":{peakHours:[{start:5,end:8},{start:19,end:23}],baits:"nightcrawlers on harnesses, deep crankbaits, leeches",techniques:"Slow trolling, jigging with minnows on rock humps",envBonus:["Lake","Reservoir","River"]},"rainbow trout":{peakHours:[{start:6,end:10},{start:16,end:19}],baits:"PowerBait, salmon eggs, spinners, worms",techniques:"Drift fishing, fly fishing with nymphs, casting spoons",envBonus:["River","Stream","Lake"]},"redfish":{peakHours:[{start:6,end:9},{start:17,end:20}],baits:"gold spoons, shrimp, cut mullet, soft plastics",techniques:"Sight-fishing tailing fish, popping cork with shrimp",envBonus:["Bay","Ocean","River"]},"spotted seatrout":{peakHours:[{start:5,end:8},{start:18,end:22}],baits:"live shrimp, soft plastics, topwater plugs",techniques:"Drifting grass flats, dock lights at night",envBonus:["Bay","Ocean","River"]},"snook":{peakHours:[{start:6,end:9},{start:18,end:23}],baits:"pilchards, bucktail jigs, live pinfish",techniques:"Casting mangrove edges, bridge fishing at night",envBonus:["Bay","River","Ocean"]},"tarpon":{peakHours:[{start:5,end:8},{start:19,end:23}],baits:"crabs, pinfish, large swimbaits, live mullet",techniques:"Drifting live bait in channels, casting to rolling fish",envBonus:["Ocean","Bay"]}};const fFish=document.getElementById('fFish'),fEnv=document.getElementById('fEnv'),fCustomEnvWrap=document.getElementById('fCustomEnvWrap'),fAskBtn=document.getElementById('fAskBtn'),fResponse=document.getElementById('fResponse');const waterRadios=document.getElementsByName('fWater');function getWater(){for(const r of waterRadios)if(r.checked)return r.value;return'freshwater';}function populateFish(){const list=getWater()==='freshwater'?freshwaterFish:saltwaterFish;fFish.innerHTML='<option value="">-- Select a fish --</option>';list.forEach(f=>{const o=document.createElement('option');o.value=f;o.textContent=f;fFish.appendChild(o);});}populateFish();waterRadios.forEach(r=>r.addEventListener('change',populateFish));fEnv.addEventListener('change',()=>{fCustomEnvWrap.style.display=fEnv.value==='Other'?'block':'none';});fAskBtn.addEventListener('click',()=>{const timeVal=document.getElementById('fTime').value.trim();const fishVal=fFish.value;const zipVal=document.getElementById('fZip').value.trim();if(!timeVal||!fishVal||!zipVal||zipVal.length<5){fResponse.innerHTML='<span style="color:var(--danger);">⛔ Please fill in ZIP, time, and select a fish.</span>';return;}fResponse.innerHTML='<span style="color:var(--warning);">🧠 Analyzing conditions…</span>';setTimeout(()=>{let hour=12;const cleaned=timeVal.replace(/\s+/g,'').toLowerCase();let h=parseInt(cleaned);if(cleaned.includes('pm')&&h<12)h+=12;if(cleaned.includes('am')&&h===12)h=0;if(!isNaN(h)&&h>=0&&h<=23)hour=h;const fishLower=fishVal.toLowerCase();let speciesInfo=null;for(const[key,val]of Object.entries(speciesKnowledge)){if(fishLower.includes(key)){speciesInfo=val;break;}}const peakHours=speciesInfo?speciesInfo.peakHours:[{start:6,end:9},{start:18,end:21}];const baitAdvice=speciesInfo?speciesInfo.baits:"live bait and artificial lures";const techniqueAdvice=speciesInfo?speciesInfo.techniques:"casting near structures, varying retrieve speed";const envBonusList=speciesInfo?(speciesInfo.envBonus||[]):[];let minDist=24;peakHours.forEach(w=>{if(hour>=w.start&&hour<=w.end)minDist=0;else{let d=Math.min(Math.abs(hour-w.start),Math.abs(hour-w.end));d=Math.min(d,24-d);if(d<minDist)minDist=d;}});let likelihood;if(minDist===0)likelihood=85+Math.floor(Math.random()*10);else if(minDist<=1)likelihood=70+Math.floor(Math.random()*10);else if(minDist<=2)likelihood=55+Math.floor(Math.random()*10);else if(minDist<=3)likelihood=40+Math.floor(Math.random()*10);else likelihood=25+Math.floor(Math.random()*10);const env=fEnv.value==='Other'?(document.getElementById('fCustomEnv').value.trim()||'Other'):fEnv.value;if(envBonusList.some(e=>env.includes(e)))likelihood+=8;else if(envBonusList.length>0)likelihood-=5;if(getWater()==='freshwater'&&saltwaterFish.includes(fishVal))likelihood-=20;if(getWater()==='saltwater'&&freshwaterFish.includes(fishVal))likelihood-=20;likelihood=Math.min(100,Math.max(5,Math.round(likelihood)));const goodTime=likelihood>=60?'YES':'NO';const barHtml=`<div style="width:100%;background:#1a3a4b;border-radius:8px;height:22px;margin-bottom:10px;overflow:hidden;"><div style="height:100%;width:${likelihood}%;background:${likelihood>=70?'#4caf50':likelihood>=40?'#ff9800':'#f44336'};border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-weight:700;font-size:0.85rem;color:#fff;">${likelihood}%</div></div>`;fResponse.innerHTML=barHtml+`📍 ZIP ${zipVal}\n\nLIKELIHOOD: ${likelihood}%\nGood time? ${goodTime}\n\nBaits: ${baitAdvice}\nTechniques: ${techniqueAdvice}`;},300);});fResponse.innerHTML='<span style="color:var(--text3);">Fill in details and click Ask Fisher AI</span>';}
 
     switchMainTab('note-translator');
 })();
