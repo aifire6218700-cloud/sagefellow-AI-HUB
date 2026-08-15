@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>sagefellow code – safe base</title>
+    <meta name="description" content="An AI coding assistant built by a small team of teenagers." />
+    <meta name="theme-color" content="#0d0d0d" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Sagefellow" />
+    <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Sagefellow%20Code%22%2C%22short_name%22%3A%22Sagefellow%22%2C%22description%22%3A%22An%20AI%20coding%20assistant%20built%20by%20a%20small%20team%20of%20teenagers.%22%2C%22start_url%22%3A%22.%2F%23app%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23ffffff%22%2C%22theme_color%22%3A%22%230d0d0d%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADMElEQVR4nO3dy3KbMABAUdzJ1v7%2F7%2BQH0lWapjWtH4CI7zlLTxYaoSs0g01O5%2FP5fYKoH6MHACMJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0t5GD2CkeZ6vfn65XHYeCaOcim%2BHXlr4fxLC68sdgW5d%2FPf%2BLd9TKoBHFrQIXlsmgGcWsgheVyYAuCYRwBo7uLvAa0oEAEsEQJoASBMAaQIgTQA38rWI1yQA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgLRDvRrRmxc%2B%2Bf3BPg4RgIW%2FTAjbGn4Esvj%2Fzfxsa2gALu5tzNN2hgXgot7HfG1j%2BBEIRhoSgN3sMeZtfe4ApAmANAGQJgDSBEDakAA83n%2BMeVufOwBpwwKwm3EEQ%2B8AImC04UcgETDS2%2BgBTNNnBEuP%2Bp%2BNZI2vEBxhDKzvEAF8cDdgb8OPQDCSAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBEDaof5TPNua5%2Fnq55fLZeeRHMfpfD6%2Fjx7E1pYuPF8VQ3AE4pfiRiEAvqhFIAD%2BUopAAKQJgKsqdwEBkCYA0gRAmgBIEwBpiQCKj%2FifVZmzRACwJBNAZUdbQ2muMgFMU%2BvCPqo2R6kApql3ge9RnJvE7wGWVB73%2F09x4X9IB7CnNWIrL9St5I5A8DsBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAN%2BIH%2FCsTwCkCYA0AZAmANIEQJoAdrLGGx28FWJ9AiBNADt6Zge3%2B29DADt7ZCFb%2FNsRwAD3LGiLf1tejTjY0tcbLPx9CIA0RyDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGk%2FAayxbyrTSlUTAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAKqUlEQVR4nO3aS27bWBBAUbuRKbn%2FdXID7oFHSRttxxbfR%2FecsQAXEpF1yafX4zjeXgCAlH9mDwAAjCcAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAgn7NHgC%2B6rquTz9znueASQD293ocx9vsIeAjX1n4nxEEAB8TACznEYv%2FT0IA4HcCgGXcsfj%2FJAQA3vkRIEsYsfxH%2Fh2A1QkAphu9lEUAgCMAJlphETsSAKq8AWCKFZb%2Fy8s6cwCMJgAAIEgAMNxqT92rzQMwggBgqFWX7apzAdxFADDM6kt29fkAHkkAAECQAGCIXZ6ud5kT4KcEAAAECQBut9tT9W7zAnyHAACAIAEAAEECAACCBAC32vU8fde5Ab5KAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAHCr8zxnjwDABwQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACDo1%2BwBeHdd16efOc9zwCRU%2BQ5Cy%2BtxHG%2Bzhyj6ys0WVicIYF8CYDCLn2ckBGA%2FAmAQi58CIQD78CPAASx%2FKnzXYR8C4GZuiNT4zsMeHAHcxE0QHAnAyrwBuIHlD%2B9cC7AuAQAAQQLgwTzxwO9cE7AmAfBAbnTwMdcGrEcAPIgbHPw%2F1wisRQAAQJAAeABPNvA1rhVYhwAAgCAB8EOeaODvuGZgDQIAAIIEAAAECQAACBIAP%2BAsE77HtQPzCQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECYAfOM9z9ggA8C0CAACCBAAABAkAAAgSAD%2FkdwAA7EgAAECQAHgAbwEA2I0AAIAgAfAg3gIAsBMB8EAiAIBdCIAHEwEA7EAAAECQALiBtwAArE4A3OQ8TyEAwLIEwM1EAAArEgADiAAAViMABnEkAMBKBMBgQgCAFfyaPUDVnxFwXdekSQAoEgCLeOa3ArvGzS7%2FJ7v%2B%2BwJzOQIAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgKBfswcA2MV1XZ9%2B5jzPAZPAz70ex%2FE2ewie21dumvCsBAGrcgQAcKPrukQwSxIAAAMIAVYjAAAGEgGsQgAADCYCWIEAAJjAkQCzCQCAiUQAswgAAAgSAACTeQvADAIAYAEigNEEAMAiRAAjCQAACBIAAAvxFoBRBAAABAkAgMV4C8AIAgAAggQAAAQJAAAIEgDcylkmfI9rh7sJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAG51nufsEWBLrh3uJgAAIEgAAECQAACAIAHA7Zxlwt9xzTCCAACAIAHAEJ5o4GtcK4wiAAAgSAAwjCcb%2BH%2BuEUYSAAzlBgcfc20wmgBgODc6%2BJ1rghkEAAAECQCm8MQD71wLzPJ6HMfb7CFou65r9ggwnMXPbN4AMJ0bITW%2B86xAALAEN0QqfNdZhSMAluNIgGdk8bMaAcCyhADPwOJnVQKAbQgCdmDhswsBAJvbNYwsSpjLjwABIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBABs7Lqu2SMAmxIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAsLHzPGeP8C27zg3PRAAAQJAAAIAgAQAAQQIANrfbefpu88KzEgAAECQA4Ans8lS9y5xQIAAAIEgAwJNY%2Fel69fmgRgDAE1l1ya46F5QJAHgyqy3b1eYB3gkAAAgSAPCEVnnqXmUO4L9ej%2BN4mz0EcJ%2Fruob%2FTYsf1ucNADy50cvY8oc9CAAIGLWULX%2FYhyMAiLnjSMDih%2F0IAIh6RAhY%2FLAvAQC8vLx8LQgsfHgeAgAAgvwIEACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIOhf7q0E1J6QploAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADMElEQVR4nO3dy3KbMABAUdzJ1v7%2F7%2BQH0lWapjWtH4CI7zlLTxYaoSs0g01O5%2FP5fYKoH6MHACMJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0t5GD2CkeZ6vfn65XHYeCaOcim%2BHXlr4fxLC68sdgW5d%2FPf%2BLd9TKoBHFrQIXlsmgGcWsgheVyYAuCYRwBo7uLvAa0oEAEsEQJoASBMAaQIgTQA38rWI1yQA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgLRDvRrRmxc%2B%2Bf3BPg4RgIW%2FTAjbGn4Esvj%2Fzfxsa2gALu5tzNN2hgXgot7HfG1j%2BBEIRhoSgN3sMeZtfe4ApAmANAGQJgDSBEDakAA83n%2BMeVufOwBpwwKwm3EEQ%2B8AImC04UcgETDS2%2BgBTNNnBEuP%2Bp%2BNZI2vEBxhDKzvEAF8cDdgb8OPQDCSAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBEDaof5TPNua5%2Fnq55fLZeeRHMfpfD6%2Fjx7E1pYuPF8VQ3AE4pfiRiEAvqhFIAD%2BUopAAKQJgKsqdwEBkCYA0gRAmgBIEwBpiQCKj%2FifVZmzRACwJBNAZUdbQ2muMgFMU%2BvCPqo2R6kApql3ge9RnJvE7wGWVB73%2F09x4X9IB7CnNWIrL9St5I5A8DsBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAN%2BIH%2FCsTwCkCYA0AZAmANIEQJoAdrLGGx28FWJ9AiBNADt6Zge3%2B29DADt7ZCFb%2FNsRwAD3LGiLf1tejTjY0tcbLPx9CIA0RyDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGk%2FAayxbyrTSlUTAAAAAElFTkSuQmCC%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22maskable%22%7D%2C%7B%22src%22%3A%22data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAKqUlEQVR4nO3aS27bWBBAUbuRKbn%2FdXID7oFHSRttxxbfR%2FecsQAXEpF1yafX4zjeXgCAlH9mDwAAjCcAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAgn7NHgC%2B6rquTz9znueASQD293ocx9vsIeAjX1n4nxEEAB8TACznEYv%2FT0IA4HcCgGXcsfj%2FJAQA3vkRIEsYsfxH%2Fh2A1QkAphu9lEUAgCMAJlphETsSAKq8AWCKFZb%2Fy8s6cwCMJgAAIEgAMNxqT92rzQMwggBgqFWX7apzAdxFADDM6kt29fkAHkkAAECQAGCIXZ6ud5kT4KcEAAAECQBut9tT9W7zAnyHAACAIAEAAEECAACCBAC32vU8fde5Ab5KAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAHCr8zxnjwDABwQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACDo1%2BwBeHdd16efOc9zwCRU%2BQ5Cy%2BtxHG%2Bzhyj6ys0WVicIYF8CYDCLn2ckBGA%2FAmAQi58CIQD78CPAASx%2FKnzXYR8C4GZuiNT4zsMeHAHcxE0QHAnAyrwBuIHlD%2B9cC7AuAQAAQQLgwTzxwO9cE7AmAfBAbnTwMdcGrEcAPIgbHPw%2F1wisRQAAQJAAeABPNvA1rhVYhwAAgCAB8EOeaODvuGZgDQIAAIIEAAAECQAACBIAP%2BAsE77HtQPzCQAACBIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECYAfOM9z9ggA8C0CAACCBAAABAkAAAgSAD%2FkdwAA7EgAAECQAHgAbwEA2I0AAIAgAfAg3gIAsBMB8EAiAIBdCIAHEwEA7EAAAECQALiBtwAArE4A3OQ8TyEAwLIEwM1EAAArEgADiAAAViMABnEkAMBKBMBgQgCAFfyaPUDVnxFwXdekSQAoEgCLeOa3ArvGzS7%2FJ7v%2B%2BwJzOQIAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAAAIEgAAECQAACBIAABAkAAAgKBfswcA2MV1XZ9%2B5jzPAZPAz70ex%2FE2ewie21dumvCsBAGrcgQAcKPrukQwSxIAAAMIAVYjAAAGEgGsQgAADCYCWIEAAJjAkQCzCQCAiUQAswgAAAgSAACTeQvADAIAYAEigNEEAMAiRAAjCQAACBIAAAvxFoBRBAAABAkAgMV4C8AIAgAAggQAAAQJAAAIEgDcylkmfI9rh7sJAAAIEgAAECQAACBIAABAkAAAgCABAABBAgAAggQAAAQJAG51nufsEWBLrh3uJgAAIEgAAECQAACAIAHA7Zxlwt9xzTCCAACAIAHAEJ5o4GtcK4wiAAAgSAAwjCcb%2BH%2BuEUYSAAzlBgcfc20wmgBgODc6%2BJ1rghkEAAAECQCm8MQD71wLzPJ6HMfb7CFou65r9ggwnMXPbN4AMJ0bITW%2B86xAALAEN0QqfNdZhSMAluNIgGdk8bMaAcCyhADPwOJnVQKAbQgCdmDhswsBAJvbNYwsSpjLjwABIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBABs7Lqu2SMAmxIAABAkAAAgSAAAQJAAAIAgAQAAQQIAAIIEAAAECQAACBIAsLHzPGeP8C27zg3PRAAAQJAAAIAgAQAAQQIANrfbefpu88KzEgAAECQA4Ans8lS9y5xQIAAAIEgAwJNY%2Fel69fmgRgDAE1l1ya46F5QJAHgyqy3b1eYB3gkAAAgSAPCEVnnqXmUO4L9ej%2BN4mz0EcJ%2Fruob%2FTYsf1ucNADy50cvY8oc9CAAIGLWULX%2FYhyMAiLnjSMDih%2F0IAIh6RAhY%2FLAvAQC8vLx8LQgsfHgeAgAAgvwIEACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIEgAAECQAACAIAEAAEECAACCBAAABAkAAAgSAAAQJAAAIOhf7q0E1J6QploAAAAASUVORK5CYII%3D%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22maskable%22%7D%5D%7D" />
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADMElEQVR4nO3dy3KbMABAUdzJ1v7/7+QH0lWapjWtH4CI7zlLTxYaoSs0g01O5/P5fYKoH6MHACMJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0t5GD2CkeZ6vfn65XHYeCaOcim+HXlr4fxLC68sdgW5d/Pf+Ld9TKoBHFrQIXlsmgGcWsgheVyYAuCYRwBo7uLvAa0oEAEsEQJoASBMAaQIgTQA38rWI1yQA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgLRDvRrRmxc++f3BPg4RgIW/TAjbGn4Esvj/zfxsa2gALu5tzNN2hgXgot7HfG1j+BEIRhoSgN3sMeZtfe4ApAmANAGQJgDSBEDakAA83n+MeVufOwBpwwKwm3EEQ+8AImC04UcgETDS2+gBTNNnBEuP+p+NZI2vEBxhDKzvEAF8cDdgb8OPQDCSAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBEDaof5TPNua5/nq55fLZeeRHMfpfD6/jx7E1pYuPF8VQ3AE4pfiRiEAvqhFIAD+UopAAKQJgKsqdwEBkCYA0gRAmgBIEwBpiQCKj/ifVZmzRACwJBNAZUdbQ2muMgFMU+vCPqo2R6kApql3ge9RnJvE7wGWVB73/09x4X9IB7CnNWIrL9St5I5A8DsBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAN+IH/CsTwCkCYA0AZAmANIEQJoAdrLGGx28FWJ9AiBNADt6Zge3+29DADt7ZCFb/NsRwAD3LGiLf1tejTjY0tcbLPx9CIA0RyDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGk/AayxbyrTSlUTAAAAAElFTkSuQmCC" type="image/png" />
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADMElEQVR4nO3dy3KbMABAUdzJ1v7/7+QH0lWapjWtH4CI7zlLTxYaoSs0g01O5/P5fYKoH6MHACMJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0t5GD2CkeZ6vfn65XHYeCaOcim+HXlr4fxLC68sdgW5d/Pf+Ld9TKoBHFrQIXlsmgGcWsgheVyYAuCYRwBo7uLvAa0oEAEsEQJoASBMAaQIgTQA38rWI1yQA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgLRDvRrRmxc++f3BPg4RgIW/TAjbGn4Esvj/zfxsa2gALu5tzNN2hgXgot7HfG1j+BEIRhoSgN3sMeZtfe4ApAmANAGQJgDSBEDakAA83n+MeVufOwBpwwKwm3EEQ+8AImC04UcgETDS2+gBTNNnBEuP+p+NZI2vEBxhDKzvEAF8cDdgb8OPQDCSAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBEDaof5TPNua5/nq55fLZeeRHMfpfD6/jx7E1pYuPF8VQ3AE4pfiRiEAvqhFIAD+UopAAKQJgKsqdwEBkCYA0gRAmgBIEwBpiQCKj/ifVZmzRACwJBNAZUdbQ2muMgFMU+vCPqo2R6kApql3ge9RnJvE7wGWVB73/09x4X9IB7CnNWIrL9St5I5A8DsBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAN+IH/CsTwCkCYA0AZAmANIEQJoAdrLGGx28FWJ9AiBNADt6Zge3+29DADt7ZCFb/NsRwAD3LGiLf1tejTjY0tcbLPx9CIA0RyDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGk/AayxbyrTSlUTAAAAAElFTkSuQmCC" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <style>
         :root {
@@ -536,6 +545,40 @@
         }
 
         /* ============================================================
+           Install banner — pops up when the browser reports installability
+           ============================================================ */
+        .install-banner {
+            position: fixed; left: 50%; bottom: 22px; z-index: 500; transform: translateX(-50%) translateY(0);
+            width: min(92vw, 460px); background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+            border-radius: 18px; padding: 16px 18px; display: flex; align-items: center; gap: 14px;
+            backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%);
+            box-shadow: var(--shadow); animation: installBannerIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+        }
+        @keyframes installBannerIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        .install-banner-icon {
+            flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: var(--highlight); color: #ffffff;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .install-banner-icon svg { width: 22px; height: 22px; }
+        .install-banner-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; color: var(--text-primary); }
+        .install-banner-text strong { font-size: 14px; }
+        .install-banner-text span { font-size: 12.5px; color: var(--text-secondary); line-height: 1.35; }
+        .install-banner-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+        .install-banner-actions .btn { padding: 8px 16px; font-size: 13px; }
+        .install-banner-dismiss {
+            background: none; border: none; color: var(--text-muted); font-size: 12px; cursor: pointer;
+            padding: 2px 4px; transition: color 0.2s;
+        }
+        .install-banner-dismiss:hover { color: var(--text-primary); }
+        @media (max-width: 560px) {
+            .install-banner { flex-wrap: wrap; bottom: 12px; padding: 14px; }
+            .install-banner-actions { flex-direction: row; width: 100%; justify-content: flex-end; }
+        }
+
+        /* ============================================================
            Marketing pages (Home / About) — reuse the app's own tokens
            ============================================================ */
         html { scroll-behavior: smooth; }
@@ -673,11 +716,29 @@
         </div>
     </div>
 
+    <div id="installBanner" class="install-banner" style="display:none;">
+        <div class="install-banner-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+        </div>
+        <div class="install-banner-text">
+            <strong>Install Sagefellow Code</strong>
+            <span>Add it to your home screen for quick, app-like access.</span>
+        </div>
+        <div class="install-banner-actions">
+            <button class="btn btn-primary" id="installBannerInstall" type="button">Install Now</button>
+            <button class="install-banner-dismiss" id="installBannerDismiss" type="button" aria-label="Dismiss">Not now</button>
+        </div>
+    </div>
+
     <!-- ============== HOME PAGE ============== -->
     <div id="page-home" class="page marketing-page">
         <nav class="site-nav">
             <a href="#home" class="brand">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
+                <svg class="brand-mark" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M85 60 L85 140 L140 140" /><path d="M60 85 L115 85 L115 165" /></svg>
                 Sagefellow
             </a>
             <div class="nav-links">
@@ -687,6 +748,7 @@
                 <a href="#about">About Us</a>
             </div>
             <div class="nav-actions">
+                <button class="btn btn-secondary install-btn" id="installBtnHome" type="button" style="display:none;">Install App</button>
                 <a href="#app" class="btn btn-primary">Launch App</a>
             </div>
         </nav>
@@ -808,7 +870,7 @@
     <div id="page-about" class="page marketing-page">
         <nav class="site-nav">
             <a href="#home" class="brand">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>
+                <svg class="brand-mark" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M85 60 L85 140 L140 140" /><path d="M60 85 L115 85 L115 165" /></svg>
                 Sagefellow
             </a>
             <div class="nav-links">
@@ -818,6 +880,7 @@
                 <a href="#about" class="active">About Us</a>
             </div>
             <div class="nav-actions">
+                <button class="btn btn-secondary install-btn" id="installBtnAbout" type="button" style="display:none;">Install App</button>
                 <a href="#app" class="btn btn-primary">Launch App</a>
             </div>
         </nav>
@@ -1032,7 +1095,7 @@
                             <line x1="3" y1="18" x2="21" y2="18" />
                         </svg>
                     </button>
-                    <h1><a href="#home" style="display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;" title="Back to home"><svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>Sagefellow<span> Code</span></a></h1>
+                    <h1><a href="#home" style="display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;" title="Back to home"><svg class="brand-mark" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M85 60 L85 140 L140 140" /><path d="M60 85 L115 85 L115 165" /></svg>Sagefellow<span> Code</span></a></h1>
                 </div>
                 <div class="header-actions">
                     <button class="header-btn" id="searchBtn" aria-label="Search chats" title="Search chats (Ctrl+K)">
@@ -1060,6 +1123,13 @@
                             <polyline points="13 2 13 9 20 9" />
                         </svg>
                         <span class="plus-badge">+</span>
+                    </button>
+                    <button class="header-btn install-btn" id="installBtnApp" aria-label="Install app" title="Install app" type="button" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -2509,6 +2579,83 @@
                     if (loader) loader.classList.add('hide');
                 }, 1500);
             });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            /* ---- Service worker, defined inline and registered via a Blob URL
+               so the whole PWA still ships as a single HTML file ---- */
+            if ('serviceWorker' in navigator) {
+                var swSource = [
+                    "var CACHE_NAME = 'sagefellow-cache-v1';",
+                    "self.addEventListener('install', function (event) { self.skipWaiting(); });",
+                    "self.addEventListener('activate', function (event) { event.waitUntil(self.clients.claim()); });",
+                    "self.addEventListener('fetch', function (event) {",
+                    "  if (event.request.method !== 'GET') return;",
+                    "  event.respondWith(",
+                    "    fetch(event.request).then(function (response) {",
+                    "      var copy = response.clone();",
+                    "      caches.open(CACHE_NAME).then(function (cache) { cache.put(event.request, copy); });",
+                    "      return response;",
+                    "    }).catch(function () { return caches.match(event.request); })",
+                    "  );",
+                    "});"
+                ].join('\n');
+                var swBlob = new Blob([swSource], { type: 'text/javascript' });
+                var swUrl = URL.createObjectURL(swBlob);
+                window.addEventListener('load', function () {
+                    navigator.serviceWorker.register(swUrl).catch(function (err) {
+                        console.log('Service worker registration failed:', err);
+                    });
+                });
+            }
+
+            /* ---- Install prompt wiring ---- */
+            var deferredInstallPrompt = null;
+            var installButtons = document.querySelectorAll('.install-btn');
+            var installBanner = document.getElementById('installBanner');
+            var installBannerInstallBtn = document.getElementById('installBannerInstall');
+            var installBannerDismissBtn = document.getElementById('installBannerDismiss');
+            var DISMISS_KEY = 'sagefellow_install_dismissed_v1';
+
+            function hideInstallUI() {
+                installButtons.forEach(function (btn) { btn.style.display = 'none'; });
+                if (installBanner) installBanner.style.display = 'none';
+                deferredInstallPrompt = null;
+            }
+
+            function triggerInstall() {
+                if (!deferredInstallPrompt) return;
+                deferredInstallPrompt.prompt();
+                deferredInstallPrompt.userChoice.finally(function () {
+                    hideInstallUI();
+                });
+            }
+
+            window.addEventListener('beforeinstallprompt', function (event) {
+                event.preventDefault();
+                deferredInstallPrompt = event;
+                installButtons.forEach(function (btn) { btn.style.display = ''; });
+                var dismissed = false;
+                try { dismissed = localStorage.getItem(DISMISS_KEY) === '1'; } catch (e) {}
+                if (!dismissed && installBanner) installBanner.style.display = 'flex';
+            });
+
+            installButtons.forEach(function (btn) {
+                btn.addEventListener('click', triggerInstall);
+            });
+
+            if (installBannerInstallBtn) installBannerInstallBtn.addEventListener('click', triggerInstall);
+
+            if (installBannerDismissBtn) {
+                installBannerDismissBtn.addEventListener('click', function () {
+                    if (installBanner) installBanner.style.display = 'none';
+                    try { localStorage.setItem(DISMISS_KEY, '1'); } catch (e) {}
+                });
+            }
+
+            window.addEventListener('appinstalled', hideInstallUI);
         })();
     </script>
 </body>
