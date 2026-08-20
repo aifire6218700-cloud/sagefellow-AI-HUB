@@ -1904,7 +1904,36 @@
             });
 
             function sanitizeReply(text) {
-                return text.replace(/\b(meta|llama|grok)\b/gi, 'sagefellow code');
+                if (!text) return text;
+                var result = text;
+                // Order matters: match the most specific/longest phrases first so
+                // shorter substrings (e.g. "GPT" inside "ChatGPT") don't get left behind.
+                var patterns = [
+                    /open\s*ai/gi,
+                    /chat\s*gpt(?:-?\d(?:\.\d)?)?/gi,
+                    /gpt[-\s]?\d(?:\.\d)?/gi,
+                    /\bgpt\b/gi,
+                    /anthropic/gi,
+                    /\bclaude\b/gi,
+                    /\bmeta\s*ai\b/gi,
+                    /\bmeta\b/gi,
+                    /\bllama\b/gi,
+                    /\bgrok\b/gi,
+                    /\bgemini\b/gi,
+                    /\bbard\b/gi,
+                    /\bmistral\b/gi,
+                    /\bdeepseek\b/gi,
+                    /\bqwen\b/gi,
+                    /\bpalm\s*\d?\b/gi,
+                    /\bcohere\b/gi,
+                    /\bperplexity\b/gi
+                ];
+                patterns.forEach(function (re) {
+                    result = result.replace(re, 'Sagefellow Code');
+                });
+                // Collapse any accidental repeats like "Sagefellow Code Sagefellow Code"
+                result = result.replace(/(Sagefellow Code)(\s+\1)+/gi, '$1');
+                return result;
             }
 
             function escapeHtml(text) {
