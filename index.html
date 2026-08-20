@@ -407,6 +407,29 @@
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .settings-overlay.show { opacity: 1; pointer-events: auto; }
+        .camera-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8); z-index: 200;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .camera-overlay.show { opacity: 1; pointer-events: auto; }
+        .camera-modal {
+            background: var(--bg-chat); border: 1px solid var(--border-color); border-radius: 16px;
+            padding: 20px; width: 92%; max-width: 480px; color: var(--text-primary);
+            backdrop-filter: blur(28px) saturate(160%); -webkit-backdrop-filter: blur(28px) saturate(160%);
+            box-shadow: var(--shadow);
+        }
+        .camera-modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .camera-modal-header h3 { font-size: 18px; }
+        .camera-stage {
+            width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden;
+            background: #000; display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .camera-stage video, .camera-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .camera-status { min-height: 18px; text-align: center; font-size: 13px; color: var(--highlight); margin-top: 10px; }
+        .camera-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+        .camera-actions .btn { padding: 10px 20px; font-size: 14px; }
         .settings-modal {
             background: var(--bg-chat); border: 1px solid var(--border-color);
             border-radius: 16px; padding: 24px;
@@ -1041,6 +1064,27 @@
             </div>
         </div>
 
+        <div class="camera-overlay" id="cameraOverlay">
+            <div class="camera-modal">
+                <div class="camera-modal-header">
+                    <h3>Show Sagefellow something</h3>
+                    <button class="close-sidebar" id="closeCameraBtn">&times;</button>
+                </div>
+                <div class="camera-stage">
+                    <video id="cameraVideo" autoplay playsinline muted></video>
+                    <img id="cameraPreview" alt="Captured photo" style="display:none;" />
+                    <canvas id="cameraCanvas" style="display:none;"></canvas>
+                </div>
+                <div class="camera-status" id="cameraStatus"></div>
+                <div class="camera-actions">
+                    <button class="btn btn-secondary" id="cameraCancelBtn" type="button">Cancel</button>
+                    <button class="btn btn-primary" id="cameraCaptureBtn" type="button">Capture</button>
+                    <button class="btn btn-primary" id="cameraRetakeBtn" type="button" style="display:none;">Retake</button>
+                    <button class="btn btn-primary" id="cameraUseBtn" type="button" style="display:none;">Use this</button>
+                </div>
+            </div>
+        </div>
+
         <div class="search-overlay" id="searchOverlay">
             <div class="search-modal">
                 <div class="search-modal-header">
@@ -1168,6 +1212,12 @@
             <div class="input-area">
                 <div class="input-row">
                     <textarea id="userInput" rows="1" placeholder="Type a coding question…" aria-label="Message"></textarea>
+                    <button class="mic-btn" id="cameraBtn" type="button" aria-label="Camera" title="Show Sagefellow something">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+                            <circle cx="12" cy="13" r="4" />
+                        </svg>
+                    </button>
                     <button class="mic-btn" id="micBtn" type="button" aria-label="Voice input" title="Voice input">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" />
@@ -1209,7 +1259,7 @@
 
             const DEFAULT_SYSTEM_PROMPT =
                 `You are sagefellow code, a helpful coding AI.  
-        - **Identity:** Only mention your name if the user directly asks who you are. Otherwise, do not introduce yourself. Never mention Meta, Llama, Grok, or any other model.  
+        - **Identity:** If the user asks who you are, who made you, or who created/built/developed you, you MUST always answer that you were created and made by Sagefellow Code. Never mention Meta, Llama, Grok, Anthropic, Claude, OpenAI, or any other model/company as your creator. Otherwise, do not introduce yourself unprompted.  
         - **Purpose:** write, review, debug, explain, and teach code with clean, production‑ready examples.  
         - **Emojis:** Never use emojis in responses.  
         - **File handling:** The user has a file storage system. All stored files are listed below with their content.  
@@ -1278,6 +1328,20 @@
             const deepThinkBtn = document.getElementById('deepThinkBtn');
             const historyBtn = document.getElementById('historyBtn');
             const micBtn = document.getElementById('micBtn');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const cameraOverlay = document.getElementById('cameraOverlay');
+            const cameraVideo = document.getElementById('cameraVideo');
+            const cameraPreview = document.getElementById('cameraPreview');
+            const cameraCanvas = document.getElementById('cameraCanvas');
+            const cameraStatus = document.getElementById('cameraStatus');
+            const closeCameraBtn = document.getElementById('closeCameraBtn');
+            const cameraCancelBtn = document.getElementById('cameraCancelBtn');
+            const cameraCaptureBtn = document.getElementById('cameraCaptureBtn');
+            const cameraRetakeBtn = document.getElementById('cameraRetakeBtn');
+            const cameraUseBtn = document.getElementById('cameraUseBtn');
+            let cameraStream = null;
+            let cameraCapturedDataUrl = null;
+            let tesseractLoadPromise = null;
             const sidebar = document.getElementById('sidebar');
             const chatContainer = document.getElementById('chatContainer');
             const sidebarBackdrop = document.getElementById('sidebarBackdrop');
@@ -2545,6 +2609,128 @@
             });
             setupVoiceInput();
 
+            /* ---- Camera capture: point the camera at something (like a math
+               problem), snap a photo, and read any text in it on-device so it
+               can be dropped straight into the message box. ---- */
+            function loadTesseract() {
+                if (window.Tesseract) return Promise.resolve();
+                if (tesseractLoadPromise) return tesseractLoadPromise;
+                tesseractLoadPromise = new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js';
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error('Could not load the text-reading library.'));
+                    document.head.appendChild(script);
+                });
+                return tesseractLoadPromise;
+            }
+
+            function resetCameraStage() {
+                cameraCapturedDataUrl = null;
+                cameraPreview.style.display = 'none';
+                cameraPreview.src = '';
+                cameraVideo.style.display = 'block';
+                cameraCaptureBtn.style.display = '';
+                cameraRetakeBtn.style.display = 'none';
+                cameraUseBtn.style.display = 'none';
+                cameraStatus.textContent = '';
+            }
+
+            async function openCamera() {
+                resetCameraStage();
+                cameraOverlay.classList.add('show');
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    cameraStatus.textContent = 'Camera access is not supported in this browser.';
+                    cameraCaptureBtn.style.display = 'none';
+                    return;
+                }
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' },
+                        audio: false
+                    });
+                    cameraVideo.srcObject = cameraStream;
+                } catch (err) {
+                    cameraStatus.textContent = 'Camera access was denied or unavailable.';
+                    cameraCaptureBtn.style.display = 'none';
+                }
+            }
+
+            function stopCameraStream() {
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                    cameraStream = null;
+                }
+                cameraVideo.srcObject = null;
+            }
+
+            function closeCamera() {
+                stopCameraStream();
+                cameraOverlay.classList.remove('show');
+                resetCameraStage();
+            }
+
+            function capturePhoto() {
+                if (!cameraStream) return;
+                const w = cameraVideo.videoWidth || 640;
+                const h = cameraVideo.videoHeight || 480;
+                cameraCanvas.width = w;
+                cameraCanvas.height = h;
+                const ctx = cameraCanvas.getContext('2d');
+                ctx.drawImage(cameraVideo, 0, 0, w, h);
+                cameraCapturedDataUrl = cameraCanvas.toDataURL('image/jpeg', 0.9);
+
+                cameraPreview.src = cameraCapturedDataUrl;
+                cameraPreview.style.display = 'block';
+                cameraVideo.style.display = 'none';
+                stopCameraStream();
+
+                cameraCaptureBtn.style.display = 'none';
+                cameraRetakeBtn.style.display = '';
+                cameraUseBtn.style.display = '';
+                cameraStatus.textContent = 'Photo captured. Use it, or retake.';
+            }
+
+            async function useCapturedPhoto() {
+                if (!cameraCapturedDataUrl) return;
+                cameraUseBtn.disabled = true;
+                cameraRetakeBtn.disabled = true;
+                cameraStatus.textContent = 'Reading the photo…';
+                try {
+                    await loadTesseract();
+                    const result = await window.Tesseract.recognize(cameraCapturedDataUrl, 'eng');
+                    const text = (result && result.data && result.data.text || '').trim();
+                    if (text) {
+                        const existing = userInput.value ? userInput.value + '\n\n' : '';
+                        userInput.value = existing + 'From my photo:\n' + text;
+                    } else {
+                        showToast('No readable text found in that photo — try describing it instead.');
+                    }
+                } catch (err) {
+                    showToast('Could not read that photo. Try again or type your question.');
+                } finally {
+                    cameraUseBtn.disabled = false;
+                    cameraRetakeBtn.disabled = false;
+                    closeCamera();
+                    userInput.style.height = 'auto';
+                    userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
+                    userInput.focus();
+                }
+            }
+
+            if (cameraBtn) cameraBtn.addEventListener('click', openCamera);
+            if (closeCameraBtn) closeCameraBtn.addEventListener('click', closeCamera);
+            if (cameraCancelBtn) cameraCancelBtn.addEventListener('click', closeCamera);
+            if (cameraCaptureBtn) cameraCaptureBtn.addEventListener('click', capturePhoto);
+            if (cameraRetakeBtn) cameraRetakeBtn.addEventListener('click', openCamera);
+            if (cameraUseBtn) cameraUseBtn.addEventListener('click', useCapturedPhoto);
+            if (cameraOverlay) {
+                cameraOverlay.addEventListener('click', (e) => {
+                    if (e.target === cameraOverlay) closeCamera();
+                });
+            }
+            window.sagefellowCloseCamera = closeCamera;
+
             userInput.focus();
             renderFileList();
             updateUsageBadge();
@@ -2564,6 +2750,7 @@
                 var target = document.getElementById('page-' + id);
                 if (target) target.classList.add('active');
                 document.body.classList.toggle('app-active', id === 'app');
+                if (id !== 'app' && window.sagefellowCloseCamera) window.sagefellowCloseCamera();
                 window.scrollTo(0, 0);
             }
             function currentHashPage() {
